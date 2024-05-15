@@ -78,7 +78,6 @@
             'beer cans': 12,
             'regular mason jars': 16,
             'kitchen sinks': 958.72,
-            'bath tubs': 26880,
             'washing machines': 4787.53,
             'shot glasses': 1.5,
             'eggs': 1.52,
@@ -157,7 +156,7 @@
             var randKey = volKeys[ volKeys.length * Math.random() << 0];
             return 'You\'ve peed ~' + amount
                 + ' fluid ounces in state capitals!  That is as much as '
-                + (amount / volumes[randKey]).toFixed(2) + ' ' + randKey + '.';
+                + (amount / volumes[randKey]).toFixed(3) + ' ' + randKey + '.';
         }
 
         function drawRegionsMap() {
