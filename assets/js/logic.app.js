@@ -69,7 +69,7 @@ function updateView(states) {
 
     // Update the URL
     const stateStr = states.filter(state => state[1] === 1).map(state => state[0].v).join(',');
-    const url = '/index.html?active=' + stateStr;
+    const url = window.location.origin + window.location.pathname + '?active=' + stateStr;
     window.history.replaceState(null, null, url);
 }
 
