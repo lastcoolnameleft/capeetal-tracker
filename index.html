@@ -13,6 +13,15 @@
     <script type="text/JavaScript" src="https://underscorejs.org/underscore-min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="assets/js/pluralize.js"></script>
+    <script src="assets/js/data.app.js"></script>
+    <script src="assets/js/logic.app.js"></script>
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "mcqoggk6iv");
+    </script>
     <script type="text/javascript">
         google.charts.load('current', {
             'packages': ['geochart'],
@@ -20,209 +29,6 @@
             'mapsApiKey': 'AIzaSyDQ9N94fMjCedY84yfdWjIw3uGIuOC8ymU'
         });
         google.charts.setOnLoadCallback(drawRegionsMap);
-
-        var states = [
-            [{ v: 'US-AK', f: 'Juneau, AK' }, 0, ''],
-            [{ v: 'US-AL', f: 'Montgomery, AL' }, 0, ''],
-            [{ v: 'US-AZ', f: 'Phoenix, AZ' }, 0, ''],
-            [{ v: 'US-AR', f: 'Little Rock, AR' }, 0, ''],
-            [{ v: 'US-CA', f: 'Sacramento, CA' }, 0, ''],
-            [{ v: 'US-CO', f: 'Denver, CO' }, 0, ''],
-            [{ v: 'US-CT', f: 'Hartford, CT' }, 0, ''],
-            [{ v: 'US-DE', f: 'Dover, DE' }, 0, ''],
-            [{ v: 'US-FL', f: 'Tallahassee, FL' }, 0, ''],
-            [{ v: 'US-GA', f: 'Atlanta, GA' }, 0, ''],
-            [{ v: 'US-HI', f: 'Honolulu, HI' }, 0, ''],
-            [{ v: 'US-ID', f: 'Boise, ID' }, 0, ''],
-            [{ v: 'US-IL', f: 'Springfield, IL' }, 0, ''],
-            [{ v: 'US-IN', f: 'Indianapolis, IN' }, 0, ''],
-            [{ v: 'US-IA', f: 'Des Moines, IA' }, 0, ''],
-            [{ v: 'US-KS', f: 'Topeka, KS' }, 0, ''],
-            [{ v: 'US-KY', f: 'Frankfort, KY' }, 0, ''],
-            [{ v: 'US-LA', f: 'Baton Rouge, LA' }, 0, ''],
-            [{ v: 'US-ME', f: 'Augusta, ME' }, 0, ''],
-            [{ v: 'US-MD', f: 'Annapolis, MD' }, 0, ''],
-            [{ v: 'US-MA', f: 'Boston, MA' }, 0, ''],
-            [{ v: 'US-MI', f: 'Lansing, MI' }, 0, ''],
-            [{ v: 'US-MN', f: 'Saint Paul, MN' }, 0, ''],
-            [{ v: 'US-MS', f: 'Jackson, MS' }, 0, ''],
-            [{ v: 'US-MO', f: 'Jefferson City, MO' }, 0, ''],
-            [{ v: 'US-MT', f: 'Helena, MT' }, 0, ''],
-            [{ v: 'US-NE', f: 'Lincoln, NE' }, 0, ''],
-            [{ v: 'US-NV', f: 'Carson City, NV' }, 0, ''],
-            [{ v: 'US-NH', f: 'Concord, NH' }, 0, ''],
-            [{ v: 'US-NJ', f: 'Trenton, NJ' }, 0, ''],
-            [{ v: 'US-NM', f: 'Santa Fe, NM' }, 0, ''],
-            [{ v: 'US-NY', f: 'Albany, NY' }, 0, ''],
-            [{ v: 'US-NC', f: 'Raleigh, NC' }, 0, ''],
-            [{ v: 'US-ND', f: 'Bismarck, ND' }, 0, ''],
-            [{ v: 'US-OH', f: 'Columbus, OH' }, 0, ''],
-            [{ v: 'US-OK', f: 'Oklahoma City, OK' }, 0, ''],
-            [{ v: 'US-OR', f: 'Salem, OR' }, 0, ''],
-            [{ v: 'US-PA', f: 'Harrisburg, PA' }, 0, ''],
-            [{ v: 'US-RI', f: 'Providence, RI' }, 0, ''],
-            [{ v: 'US-SC', f: 'Columbia, SC' }, 0, ''],
-            [{ v: 'US-SD', f: 'Pierre, SD' }, 0, ''],
-            [{ v: 'US-TN', f: 'Nashville, TN' }, 0, ''],
-            [{ v: 'US-TX', f: 'Austin, TX' }, 0, ''],
-            [{ v: 'US-UT', f: 'Salt Lake City, UT' }, 0, ''],
-            [{ v: 'US-VT', f: 'Montpelier, VT' }, 0, ''],
-            [{ v: 'US-VA', f: 'Richmond, VA' }, 0, ''],
-            [{ v: 'US-WA', f: 'Olympia, WA' }, 0, ''],
-            [{ v: 'US-WV', f: 'Charleston, WV' }, 0, ''],
-            [{ v: 'US-WI', f: 'Madison, WI' }, 0, ''],
-            [{ v: 'US-WY', f: 'Cheyenne, WY' }, 0, '']
-        ];
-
-        // All in fluid ounces
-        var volumes = {
-            'rat urination': 0.11,
-            'mouse urination': 0.02,
-            'elephant urination': 160,
-            'whale urination': 627,
-            'cat urination': 0.9,
-            'dog urination': 1.3,
-            'horse urination': 10,
-            'beer can': 12,
-            'regular mason jar': 16,
-            'kitchen sink': 958.72,
-            'shot glass': 1.5,
-            'egg': 1.52,
-            'stanley cup': 40,
-            'milk jug': 128,
-            'teaspoon': 0.166667,
-            'wine bottle': 25.36,
-            'big gulp': 32,
-            'caprisun': 0.554113,
-            'cirkul bottle': 12,
-            'espresso double shot': 2,
-            'whiskey pour': 1.5,
-            'expresso martini': 3.75,
-            'cornelius keg': 640,
-            'vodka fifth': 25.6,
-            'Four Loko': 23.5,
-            'beer growler': 64,
-            'imperial pints': 19.2,
-            'ice cream scoop': 4,
-            'jigger': 1.5,
-            'jello cup': 12.5,
-            'juice box': 6,
-            'junior frosty': 6,
-            'salsa jar': 16,
-            'spaghetti jar': 26,
-            'nutella jar': 35.3,
-            'mayonnaise jar': 30,
-            'ketchup bottle': 20,
-            'kirkland wattle bottle': 16.9,
-            'grande Starbucks cup': 16,
-            'venti Starbucks cup': 24,
-            'IV bag': 8.45351, // https://www.quora.com/How-many-liters-is-an-IV-bag
-            'Keurig descaling solution bottle': 14, // https://www.coffeeforless.com/products/keurig-descaling-solution-14oz-bottle
-            'large Stanley': 40, // https://www.amazon.com/Stanley-Quencher-FlowState-Stainless-Insulated/dp/B0BQZ9K23L  
-            'large Yeti bottle': 64, // https://www.yeti.com/drinkware/bottles/chug-bottle-64oz.html
-            'martini glass': 0.554113,
-            'perfume bottle': 3.4,
-            'gasoline canister': 128,
-            'paint bucket': 128,
-            'coffee mug': 12,
-            'Ninja half carafe': 30,
-            'red solo cup': 18,
-            'Red Bull can': 8.4,
-            'wine bottle': 25.4,
-            'yogurt cup': 6,
-            'beer yard': 48
-        };
-
-        function getOptions(states) {
-            // This is hacky, but if there's no states selected, then Google Charts will show ALL states as selected.
-            var colors = ['#f5f5f5', '#e0b336'];
-            if (countActiveStates(states) == 0) {
-                colors = ['#f5f5f5'];
-            }
-            var options = {
-                region: 'US',
-                displayMode: 'regions',
-                resolution: 'provinces',
-                enableRegionInteractivity: true,
-                legend: 'none',
-                colorAxis: {
-                    colors: colors,
-                },
-            };
-            return options;
-        }
-
-        function findStateIndex(states, value) {
-            for (var i = 0; i < states.length; i++) {
-                if (states[i][0].v === value) {
-                    return i;
-                }
-            }
-            return -1; // Return -1 if no match is found
-        }
-
-        function countActiveStates(states) {
-            let count = 0;
-            for (let i = 0; i < states.length; i++) {
-                if (states[i][1] === 1) {
-                    count++;
-                }
-            }
-            return count;
-        }
-
-        function toggleRegion(states, region) {
-            console.log("swapping" + region);
-            stateIndex = findStateIndex(states, region);
-            if (states[stateIndex][1] == 0)
-                states[stateIndex][1] = 1
-            else
-                states[stateIndex][1] = 0
-            return states;
-        }
-
-        function generateData(states) {
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'State');
-            data.addColumn('number', 'Value');
-            data.addColumn({ type: 'string', role: 'tooltip' });
-            data.addRows(states);
-            return data;
-        }
-
-        function updateView(states) {
-            activeStates = countActiveStates(states);
-            totalStates = states.length;
-            $('#active_states').html(activeStates);
-            $('#total_states').html(totalStates);
-            $('#percent').html(Math.round(activeStates / totalStates * 100) + '% of states');
-            $('#amount').html(getVolume(volumes, activeStates * 8));
-        }
-
-        function getVolume(volumes, amount) {
-            var volKeys = Object.keys(volumes);
-            var randKey = volKeys[volKeys.length * Math.random() << 0];
-            var volume = Math.round(1000 * amount / volumes[randKey]) / 1000;
-            return 'You\'ve peed ~' + amount
-                + ' fluid ounces in state capitals!  That is as much as '
-                + volume + ' ' + pluralize(randKey, volume) + '.';
-        }
-
-        function drawRegionsMap() {
-            var data = generateData(states);
-
-            var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
-            chart.draw(data, getOptions(states));
-            updateView(states);
-
-            google.visualization.events.addListener(chart, 'regionClick', function (r) {
-                console.log('You clicked on ' + r.region);
-                states = toggleRegion(states, r.region);
-                var newData = generateData(states);
-                chart.draw(newData, getOptions(states));
-                updateView(states);
-            });
-        }
     </script>
 </head>
 
@@ -230,7 +36,7 @@
 
     <!-- Header -->
     <header id="header">
-        <a href="index.html" class="title">Ca-pee-tal Tracker</a>
+        <a href="index.html" class="title">Ca-PEE-tal Tracker</a>
         <nav>
             <ul>
                 <li><a href="index.html" class="active">Home</a></li>
@@ -241,19 +47,13 @@
 
     <!-- Wrapper -->
     <div id="wrapper">
-
         <!-- Main -->
         <section id="main" class="wrapper">
             <div class="inner">
-                <p>See how many US state capitals you've peed at!</p>
-
-                <h3 id="percent">
-                    </h1>
-                    <div id="regions_div" style="width: 900px; height: 500px;"></div>
-                    <h3 id="amount">
-                        </h1>
-
-
+                <p>Welcome to the Ca-PEE-tal tracker.  This is a tool designed to let you share with your friends all of the US state capitals you've peed at!</p>
+                <h3 id="percent"></h3>
+                <div id="regions_div" style="width: 900px; height: 500px;"></div>
+                <h3 id="amount"></h3>
             </div>
         </section>
     </div>
@@ -276,7 +76,5 @@
     <script src="assets/js/breakpoints.min.js"></script>
     <script src="assets/js/util.js"></script>
     <script src="assets/js/main.js"></script>
-
 </body>
-
 </html>
