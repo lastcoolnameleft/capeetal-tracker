@@ -15,10 +15,14 @@ router.get('/', function(req, res, next) {
   imgPath = '/map/us/' + states.join('-') + '.png';
   var imgUrl = req.protocol + '://' + req.get('host') + imgPath;
 
+  var stateListStr = states.join(', ');
+  var stateCount = states.length;
   res.render('index', { 
     title: 'Ca-PEE-tal Tracker',
     fullUrl,
     imgUrl,
+    stateListStr,
+    stateCount,
   });
 });
 
