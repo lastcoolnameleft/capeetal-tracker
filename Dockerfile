@@ -9,6 +9,17 @@ ENV NODE_ENV $NODE_ENV
 
 WORKDIR /code
 
+RUN apk add --update --no-cache \
+    make \
+    g++ \
+    jpeg-dev \
+    cairo-dev \
+    giflib-dev \
+    pango-dev \
+    libtool \
+    autoconf \
+    automake
+    
 # default to port 80 for node, and 9229 and 9230 (tests) for debug
 ARG PORT=3000
 ENV PORT $PORT
