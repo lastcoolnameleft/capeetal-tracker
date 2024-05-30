@@ -25,10 +25,16 @@
         google.charts.load('current', {
             'packages': ['geochart'],
             // Note: you will need to get a mapsApiKey for more than simple.
-            'mapsApiKey': 'AIzaSyDQ9N94fMjCedY84yfdWjIw3uGIuOC8ymU'
+            'mapsApiKey': 'AIzaSyCARIrIRh4GT-7tD7dVTmB2_nK3DzvNMuk'
         });
         google.charts.setOnLoadCallback(drawRegionsMap);
     </script>
+    <meta property="og:url"                content="<%= fullUrl %>" />
+    <meta property="og:type"               content="website" />
+    <meta property="og:title"              content="Welcome to the Ca-PEE-tal tracker." />
+    <meta property="og:description"        content="This is a tool designed to let you share with your friends all of the US state capitals you've peed at!" />
+    <meta property="og:image"              content="<%= imgUrl %>" />
+    
 </head>
 
 <body class="is-preload">

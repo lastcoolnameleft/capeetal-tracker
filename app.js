@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var aboutRouter = require('./routes/about');
+var mapRouter = require('./routes/map');
 
 var app = express();
 
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/about', aboutRouter);
+app.use('/map/us/', mapRouter);
 
 app.use('/favicon.ico', express.static('public/images/favicon.ico'));
 
