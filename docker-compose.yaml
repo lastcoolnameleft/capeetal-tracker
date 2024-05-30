@@ -1,0 +1,12 @@
+version: "3.4"
+
+services:
+  capeetal-tracker-prod:
+    image: "ghcr.io/lastcoolnameleft/capeetal-tracker@sha256:07cfdac64cb2ac0f7b8f1b72e31055a1696f3445e31fdeb42fb18110f1514bc9"
+    container_name: capeetal-tracker-prod
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.capeetal-tracker-prod.rule=Host(`capeetal-tracker.lastcoolnameleft.com`)"
+      - "traefik.http.routers.capeetal-tracker-prod.entrypoints=websecure"
+      - "traefik.http.routers.capeetal-tracker-prod.tls.certresolver=myresolver"
+      - "traefik.http.services.capeetal-tracker-prod.loadbalancer.server.port=3000"
