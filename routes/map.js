@@ -1,11 +1,13 @@
 var express = require("express");
 var router = express.Router();
 const jsdom = require("jsdom");
+const stateHelper = require("./helpers/states");
 
 /* GET home page. */
 router.get("/:state.png", function (req, res, next) {
   console.log("map route0");
   var states = req.params.state.split("-");
+  states = stateHelper.filterStates(states);  
   var stateStr = '[\'' + states.join('\',\'') + '\']'
   console.log(stateStr);
 

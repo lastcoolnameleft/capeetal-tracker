@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const stateHelper = require('./helpers/states');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -8,7 +9,8 @@ router.get('/', function(req, res, next) {
 
   // Expecting a string like 'US-CA,US-NY'
   if (states) {
-    states = states.split(',').map(state => state.slice(3));
+    states = states.split(',').map(state => state.slice(3).toUpperCase());
+    states = stateHelper.filterStates(states);
   } else {
     states = [];
   }
