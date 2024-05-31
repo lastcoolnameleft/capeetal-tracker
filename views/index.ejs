@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 
 <head>
@@ -14,12 +13,14 @@
     <script src="js/pluralize.js"></script>
     <script src="js/data.app.js"></script>
     <script src="js/logic.app.js"></script>
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "mcqoggk6iv");
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HEFMBYE34Y"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-HEFMBYE34Y');
     </script>
     <script type="text/javascript">
         google.charts.load('current', {
@@ -29,19 +30,15 @@
         });
         google.charts.setOnLoadCallback(drawRegionsMap);
     </script>
-    <meta property="og:url"                content="<%= fullUrl %>" />
-    <meta property="og:type"               content="website" />
-    <meta property="og:title"              content="I've peed in <%= stateCount %> state <%= capitalStr %>: <%= stateListStr %>" />
-    <meta property="og:image"              content="<%= imgUrl %>" />
-    <meta property="fb:app_id"             content="953843409571390" />
-    
+    <meta property="og:url" content="<%= fullUrl %>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="I've peed in <%= stateCount %> state <%= capitalStr %>: <%= stateListStr %>" />
+    <meta property="og:image" content="<%= imgUrl %>" />
+    <meta property="fb:app_id" content="953843409571390" />
+
 </head>
 
 <body class="is-preload">
-    <div id="fb-root"></div>
-    <div id="fb-root"></div>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v20.0&appId=953843409571390" nonce="j1EmFzKi"></script>
-
     <!-- Header -->
     <header id="header">
         <a href="/" class="title">Ca-PEE-tal Tracker</a>
@@ -59,15 +56,17 @@
         <section id="main" class="wrapper">
             <div class="inner">
                 <center>
-                    <p>Welcome to the Ca-PEE-tal tracker.  You can now share with your friends all of the US state capitals you've peed at!</p>
+                    <p>Welcome to the Ca-PEE-tal tracker. You can now share with your friends all of the US state
+                        capitals you've peed at!</p>
                     <h3 id="percent"></h3>
                     <div id="regions_div" style="width: 900px; height: 500px;"></div>
-                    <h4 id="amount"></h3>
-                    Share with your friends!<br>
+                    <h4 id="amount">
+                        </h3>
+                        Share with your friends!<br>
 
-                    <a id='fb-share' href="https://facebook.com/sharer/sharer.php?u=">
-                        <img src="/images/facebook.png" alt="Facebook" style="width: 50px; height: 50px;">    
-                    </a>
+                        <a id='fb-share' href="https://facebook.com/sharer/sharer.php?u=">
+                            <img src="/images/facebook.png" alt="Facebook" style="width: 50px; height: 50px;">
+                        </a>
                 </center>
             </div>
         </section>
@@ -92,4 +91,5 @@
     <script src="js/util.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>
