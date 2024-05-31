@@ -38,6 +38,9 @@
 </head>
 
 <body class="is-preload">
+    <div id="fb-root"></div>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v20.0&appId=953843409571390" nonce="j1EmFzKi"></script>
 
     <!-- Header -->
     <header id="header">
@@ -55,10 +58,17 @@
         <!-- Main -->
         <section id="main" class="wrapper">
             <div class="inner">
-                <p>Welcome to the Ca-PEE-tal tracker.  This is a tool designed to let you share with your friends all of the US state capitals you've peed at!</p>
-                <h3 id="percent"></h3>
-                <div id="regions_div" style="width: 900px; height: 500px;"></div>
-                <h3 id="amount"></h3>
+                <center>
+                    <p>Welcome to the Ca-PEE-tal tracker.  This is a tool designed to let you share with your friends all of the US state capitals you've peed at!</p>
+                    <h3 id="percent"></h3>
+                    <div id="regions_div" style="width: 900px; height: 500px;"></div>
+                    <h4 id="amount"></h3>
+                    Share with your friends!<br>
+
+                    <a id='fb-share' href="https://facebook.com/sharer/sharer.php?u=">
+                        <img src="/images/facebook.png" alt="Facebook" style="width: 50px; height: 50px;">    
+                    </a>
+                </center>
             </div>
         </section>
     </div>
