@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var pluralize = require('pluralize')
 const stateHelper = require('./helpers/states');
 
 /* GET home page. */
@@ -25,6 +26,7 @@ router.get('/', function(req, res, next) {
     imgUrl,
     stateListStr,
     stateCount,
+    capitalStr: pluralize('capital', stateCount),
   });
 });
 
