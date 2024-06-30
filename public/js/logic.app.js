@@ -64,8 +64,7 @@ function updateView(states) {
     totalStates = states.length;
     $('#active_states').html(activeStates);
     $('#total_states').html(totalStates);
-    $('#percent').html(Math.round(activeStates / totalStates * 100) + '% of states');
-    $('#amount').html(getVolume(volumes, activeStates * 8));
+    $('#amount').html(getAmount(activeStates, totalStates, volumes, activeStates * 8));
 
     // Update the URL
     const stateStr = states.filter(state => state[1] === 1).map(state => state[0].v).join(',');
@@ -76,13 +75,12 @@ function updateView(states) {
     window.history.replaceState(null, null, url);
 }
 
-function getVolume(volumes, amount) {
+function getAmount(activeStates, totalStates, volumes, amount) {
+    var percent = Math.round(activeStates / totalStates * 100);
     var volKeys = Object.keys(volumes);
     var randKey = volKeys[volKeys.length * Math.random() << 0];
     var volume = Math.round(1000 * amount / volumes[randKey]) / 1000;
-    return 'You\'ve peed ~' + amount
-        + ' fluid ounces in state capitals!  That is as much as '
-        + volume + ' ' + pluralize(randKey, volume) + '.';
+    return `You've peed in ${percent}% of states.  That is ~${amount} fluid ounces or ${volume} ${pluralize(randKey, volume)}.`;
 }
 
 function addVisitedStates() {
