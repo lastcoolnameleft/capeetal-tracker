@@ -39,6 +39,9 @@
 </head>
 
 <body class="is-preload">
+    <!-- Facebook share button -->
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v20.0&appId=953843409571390" nonce="Dv5HItHj"></script>
     <!-- Header -->
     <header id="header">
         <a href="/" class="title">Ca-PEE-tal Tracker</a>
@@ -56,15 +59,11 @@
         <section id="main" class="wrapper">
             <div class="inner">
                 <center>
-                    <p>Welcome to the Ca-PEE-tal tracker where you can track each US state capital you've urinated!</p>
+                    <p>Welcome to the Ca-PEE-tal tracker where you track each US state capital you've urinated!</p>
                     <h2 id="amount"></h2>
                     <div id="regions_div"></div>
-                        </h3>
-                        Share with your friends!<br>
-
-                        <a id='fb-share' href="https://facebook.com/sharer/sharer.php?u=">
-                            <img src="/images/facebook.png" alt="Facebook" style="width: 50px; height: 50px;">
-                        </a>
+                    <br \>
+                    <div class="fb-share-button" id="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
                 </center>
             </div>
         </section>
