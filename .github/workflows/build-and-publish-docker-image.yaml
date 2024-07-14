@@ -76,7 +76,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
-        source: "docker-compose.yml,docker-compose-stg.yml"
+        source: "docker-compose.yaml,docker-compose-stg.yaml"
         target: /home/ghaction/capeetal-tracker/
 
     - name: executing remote ssh commands using password
@@ -91,4 +91,4 @@ jobs:
           echo "Starting pull"
           cd ${{ env.VM_DIR }}
           echo "CAPEETAL_TRACKER_IMAGE:  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}" > staging.env
-          docker rollout -f docker-compose-stg.yml --env-file staging.env capeetal-tracker-stg
+          docker rollout -f docker-compose-stg.yaml --env-file staging.env capeetal-tracker-stg
