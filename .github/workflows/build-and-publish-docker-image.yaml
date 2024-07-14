@@ -89,7 +89,10 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          echo "Starting pull"
+          echo "Starting stg rollout"
           cd ${{ env.VM_DIR }}
           echo "CAPEETAL_TRACKER_IMAGE:  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}" > staging.env
           docker rollout -f docker-compose-stg.yaml --env-file staging.env capeetal-tracker-stg
+          echo "Starting prod rollout"
+          echo "CAPEETAL_TRACKER_IMAGE:  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}" > production.env
+          docker rollout -f docker-compose.yaml --env-file production.env capeetal-tracker-prod
