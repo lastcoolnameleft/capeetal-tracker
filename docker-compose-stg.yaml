@@ -5,7 +5,7 @@ services:
     image: ${CAPEETAL_TRACKER_IMAGE}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.capeetal-tracker-prod.rule=Host(`stg.capeetal-tracker.com`)"
-      - "traefik.http.routers.capeetal-tracker-prod.entrypoints=websecure"
-      - "traefik.http.routers.capeetal-tracker-prod.tls.certresolver=myresolver"
-      - "traefik.http.services.capeetal-tracker-prod.loadbalancer.server.port=3000"
+      - "traefik.http.routers.capeetal-tracker-stg.rule=Host(`stg.capeetaltracker.com`)"
+      - "traefik.http.routers.capeetal-tracker-stg.entrypoints=websecure"
+      - "traefik.http.routers.capeetal-tracker-stg.tls.certresolver=myresolver"
+      - "traefik.http.services.capeetal-tracker-stg.loadbalancer.server.port=3000"
