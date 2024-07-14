@@ -63,7 +63,14 @@
                     <h2 id="amount"></h2>
                     <div id="regions_div"></div>
                     <br \>
-                    <div class="fb-share-button" id="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+                    <script language="javascript">
+                        function fbshareCurrentPage()
+                        {window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(window.location.href)+"&t="+document.title, '',
+                        'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+                        return false; }
+                    </script>
+                    <a href="javascript:fbshareCurrentPage()" alt="Share on Facebook"><img src="/images/facebook.png" alt="Facebook" style="width: 50px; height: 50px;"></a>
+
                 </center>
             </div>
         </section>
