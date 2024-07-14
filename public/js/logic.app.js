@@ -71,7 +71,6 @@ function updateView(states) {
     var url = window.location.origin + window.location.pathname;
     if (stateStr)
             url += '?active=' + stateStr;
-    $('#fb-share-button').attr('data-href', url);
     window.history.replaceState(null, null, url);
 }
 
