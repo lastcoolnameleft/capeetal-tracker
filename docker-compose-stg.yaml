@@ -1,0 +1,11 @@
+version: "3.4"
+
+services:
+  capeetal-tracker-stg:
+    image: ${CAPEETAL_TRACKER_IMAGE}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.capeetal-tracker-prod.rule=Host(`stg-capeetal-tracker.lastcoolnameleft.com`)"
+      - "traefik.http.routers.capeetal-tracker-prod.entrypoints=websecure"
+      - "traefik.http.routers.capeetal-tracker-prod.tls.certresolver=myresolver"
+      - "traefik.http.services.capeetal-tracker-prod.loadbalancer.server.port=3000"
