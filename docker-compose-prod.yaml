@@ -12,4 +12,4 @@ services:
     volumes:
       - /data/capeetal-tracker-prod/db:/code/db
     environment:
-      - SQLITE_DB_PATH=/data/capeetal-tracker-prod/db/
+      - SQLITE_DB_PATH=/code/db/
