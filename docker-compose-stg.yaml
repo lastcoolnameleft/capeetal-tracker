@@ -9,3 +9,7 @@ services:
       - "traefik.http.routers.capeetal-tracker-stg.entrypoints=websecure"
       - "traefik.http.routers.capeetal-tracker-stg.tls.certresolver=myresolver"
       - "traefik.http.services.capeetal-tracker-stg.loadbalancer.server.port=3000"
+    volumes:
+      - /data/capeetal-tracker-stg/db:/code/db
+    environment:
+      - SQLITE_DB_PATH=/data/capeetal-tracker-prod/db/

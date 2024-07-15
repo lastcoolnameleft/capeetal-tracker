@@ -1,7 +1,7 @@
 function getOptions(states) {
     var colors = ['#f5f5f5', '#e0b336'];
     // This is hacky, but if there's no states selected, then Google Charts will show ALL states as selected.
-    if (countActiveStates(states) == 0) {
+    if (countActiveLocations(states) == 0) {
         colors = ['#f5f5f5'];
     }
     var options = {
@@ -17,7 +17,7 @@ function getOptions(states) {
     return options;
 }
 
-function findStateIndex(states, value) {
+function findLocationIndex(states, value) {
     for (var i = 0; i < states.length; i++) {
         if (states[i][0].v === value) {
             return i;
@@ -26,7 +26,7 @@ function findStateIndex(states, value) {
     return -1; // Return -1 if no match is found
 }
 
-function countActiveStates(states) {
+function countActiveLocations(states) {
     let count = 0;
     for (let i = 0; i < states.length; i++) {
         if (states[i][1] === 1) {
@@ -38,9 +38,9 @@ function countActiveStates(states) {
 
 function toggleRegion(states, region) {
     console.log("swapping " + region);
-    stateIndex = findStateIndex(states, region);
+    stateIndex = findLocationIndex(states, region);
     if (stateIndex == -1) {
-        console.log("Could not find state " + region);
+        console.log("Could not find location " + region);
         return states;
     }
     if (states[stateIndex][1] == 0)
@@ -60,7 +60,7 @@ function generateData(states) {
 }
 
 function updateView(states) {
-    activeStates = countActiveStates(states);
+    activeStates = countActiveLocations(states);
     totalStates = states.length;
     $('#active_states').html(activeStates);
     $('#total_states').html(totalStates);
@@ -72,6 +72,7 @@ function updateView(states) {
     if (stateStr)
             url += '?active=' + stateStr;
     window.history.replaceState(null, null, url);
+    saveLocation(stateStr);
 }
 
 function getAmount(activeStates, totalStates, volumes, amount) {
@@ -82,22 +83,42 @@ function getAmount(activeStates, totalStates, volumes, amount) {
     return `You've peed in ${percent}% of states.  That is ~${amount} fluid ounces or ${volume} ${pluralize(randKey, volume)}.`;
 }
 
-function addVisitedStates() {
+function addVisitedLocations() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const visitedStatesParam = urlParams.get('active');
-    if (!visitedStatesParam) { return }
-    visitedStates = visitedStatesParam.split(',');
-    if (!visitedStates) { return }
-    for (stateIdx in visitedStates) {
-        var state = visitedStates[stateIdx];
-        console.log(state);
-        toggleRegion(states, state);
+    const visitedLocationsParam = urlParams.get('active');
+    if (!visitedLocationsParam) { return }
+    const visitedLocations = visitedLocationsParam.split(',');
+    if (!visitedLocations) { return }
+    for (var locationIdx in visitedLocations) {
+        var location = visitedLocations[locationIdx];
+        console.log(location);
+        toggleRegion(states, location);
     }
 }
 
+
+function initMap() {
+    drawRegionsMap();
+    // Create session
+    localStorage.setItem('SESSION', window.crypto.randomUUID());
+}
+
+// Don't care about response.  Just save the location and session (for de-dupe)
+function saveLocation(locations) {
+    $.ajax({
+        type: "POST",
+        url: '/api/save',
+        data: {
+            session: localStorage.getItem('SESSION'),
+            region: 'US',
+            locations,
+        },
+      });
+}
+
 function drawRegionsMap() {
-    addVisitedStates();
+    addVisitedLocations();
     var data = generateData(states);
 
     var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));

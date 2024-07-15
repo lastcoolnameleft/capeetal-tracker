@@ -92,8 +92,6 @@ jobs:
           echo "Starting stg rollout"
           cd ${{ env.VM_DIR }}
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          echo "CAPEETAL_TRACKER_IMAGE:  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}" > staging.env
           docker rollout -f docker-compose-stg.yaml --env-file staging.env capeetal-tracker-stg
-          echo "Starting prod rollout"
-          echo "CAPEETAL_TRACKER_IMAGE:  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}" > production.env
-          docker rollout -f docker-compose.yaml --env-file production.env capeetal-tracker-prod
+          #echo "Starting prod rollout"
+          #docker rollout -f docker-compose.yaml --env-file production.env capeetal-tracker-prod
