@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "SQLITE_DB_PATH=./ node ./bin/www"
   },
   "dependencies": {
     "canvas": "^2.11.2",

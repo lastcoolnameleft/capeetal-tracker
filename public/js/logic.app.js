@@ -99,9 +99,15 @@ function addVisitedLocations() {
 
 
 function initMap() {
-    drawRegionsMap();
     // Create session
-    localStorage.setItem('SESSION', window.crypto.randomUUID());
+    if (!localStorage.getItem('SESSION')) {
+        if (window.crypto.randomUUID) {
+            localStorage.setItem('SESSION', window.crypto.randomUUID());
+        } else {
+            console.log("No randomUUID available");
+        }
+    }
+    drawRegionsMap();
 }
 
 // Don't care about response.  Just save the location and session (for de-dupe)
