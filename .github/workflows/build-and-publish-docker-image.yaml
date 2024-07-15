@@ -77,7 +77,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
-        source: "docker-compose.yaml,docker-compose-stg.yaml"
+        source: "docker-compose-prod.yaml,docker-compose-stg.yaml"
         target: /home/ghaction/capeetal-tracker/
 
     - name: executing remote ssh commands using password
