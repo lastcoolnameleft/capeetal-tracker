@@ -11,5 +11,7 @@ services:
       - "traefik.http.services.capeetal-tracker-prod.loadbalancer.server.port=3000"
     volumes:
       - /data/capeetal-tracker-prod/db:/code/db
+      - /data/capeetal-tracker-prod/map:/code/map
     environment:
       - SQLITE_DB_PATH=/code/db/
+      - MAP_CACHE_PATH=/code/map/
