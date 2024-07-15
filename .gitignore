@@ -133,3 +133,5 @@ dist
 
 # custom
 *.db
+data
+*.swp

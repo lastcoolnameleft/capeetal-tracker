@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/about', aboutRouter);
 app.use('/api', apiRouter);
-app.use('/map/us/', mapRouter);
+app.use('/map/', mapRouter);
 
 app.use('/favicon.ico', express.static('public/images/favicon.ico'));
 
