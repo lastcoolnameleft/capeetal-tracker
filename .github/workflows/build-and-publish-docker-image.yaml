@@ -94,4 +94,4 @@ jobs:
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           docker rollout -f docker-compose-stg.yaml --env-file staging.env capeetal-tracker-stg
           #echo "Starting prod rollout"
-          #docker rollout -f docker-compose.yaml --env-file production.env capeetal-tracker-prod
+          #docker rollout -f docker-compose-prod.yaml --env-file production.env capeetal-tracker-prod
