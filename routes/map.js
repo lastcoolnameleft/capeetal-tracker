@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const jsdom = require("jsdom");
+const fs = require("fs");
 const stateHelper = require("./helpers/states");
 
 /* GET home page. */
@@ -8,13 +9,21 @@ router.get("/:region/:state.png", function (req, res, next) {
   console.log("map route");
   var region = req.params.region;
   var states = req.params.state.split("-");
+  var loopCount = 0;
   states = stateHelper.filterStates(states);  
-  var stateStr = '[\'' + states.join('\',\'') + '\']'
-  console.log(stateStr);
+  var stateStr = '[\'' + states.join('\',\'') + '\']';
+  const imgPath = process.env.MAP_CACHE_PATH + region + '/' + states.join('-').toLocaleLowerCase() + '.png';
+  console.log(imgPath);
+
+  if (fs.existsSync(imgPath)) {
+    console.log("sending cache");
+    res.sendFile(imgPath);
+    return;
+  } else {
+    console.log("creating map");
 
   const { JSDOM } = jsdom;
 
-  console.log("map route2");
   domOptions = {
     url: "https://capeetal-tracker.lastcoolnameleft.com/",
     runScripts: "dangerously",
@@ -68,8 +77,8 @@ router.get("/:region/:state.png", function (req, res, next) {
   </html>
   `, domOptions);
   // The script will not be executed, by default:
+  }
 
-  var loopCount = 0;
   function waitForElement() {
     loopCount++;
     console.log("loop");
@@ -99,20 +108,18 @@ router.get("/:region/:state.png", function (req, res, next) {
       res.set("Cache-Control", "public, max-age=0");
       res.set("Last-Modified", "Thu, 30 May 2024 00:31:55 GMT");
       res.contentType("image/png");
-      saveImage(region, req.params.state, img)
+      saveImage(imgPath, img)
       res.send(img);
     }
   }
 
-  function saveImage(region, stateStr, img) {
-    const fs = require("fs");
-    const imgPath = process.env.MAP_CACHE_PATH + region + '/' + stateStr + '.png';
+  function saveImage(imgPath, img) {
     fs.writeFile(imgPath, img, (err) => {
       if (err) {
         console.error(err);
         return;
       }
-      console.log("file saved");
+      console.log("file saved:" + imgPath);
     });
   }
   waitForElement();

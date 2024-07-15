@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "SQLITE_DB_PATH=./data/db/ MAP_CACHE_PATH=./data/map/ node ./bin/www"
+    "start": "SQLITE_DB_PATH=${PWD}/data/db/ MAP_CACHE_PATH=${PWD}/data/map/ node ./bin/www"
   },
   "dependencies": {
     "canvas": "^2.11.2",

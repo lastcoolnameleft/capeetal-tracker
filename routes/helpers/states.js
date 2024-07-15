@@ -2,5 +2,5 @@ exports.allStates = ['US-AK', 'US-AL', 'US-AZ', 'US-AR', 'US-CA', 'US-CO', 'US-C
 
 exports.filterStates = function(active) {
     return active.filter(state => 
-        exports.allStates.includes(state.toLocaleUpperCase()) || exports.allStates.includes('US-' + state.toLocaleUpperCase()))
+        exports.allStates.includes(state.toLocaleUpperCase()) || exports.allStates.includes('US-' + state.toLocaleUpperCase())).sort();
 };
