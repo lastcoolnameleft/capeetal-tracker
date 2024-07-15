@@ -4,8 +4,9 @@ const jsdom = require("jsdom");
 const stateHelper = require("./helpers/states");
 
 /* GET home page. */
-router.get("/:state.png", function (req, res, next) {
-  console.log("map route0");
+router.get("/:region/:state.png", function (req, res, next) {
+  console.log("map route");
+  var region = req.params.region;
   var states = req.params.state.split("-");
   states = stateHelper.filterStates(states);  
   var stateStr = '[\'' + states.join('\',\'') + '\']'
@@ -98,8 +99,21 @@ router.get("/:state.png", function (req, res, next) {
       res.set("Cache-Control", "public, max-age=0");
       res.set("Last-Modified", "Thu, 30 May 2024 00:31:55 GMT");
       res.contentType("image/png");
+      saveImage(region, req.params.state, img)
       res.send(img);
     }
+  }
+
+  function saveImage(region, stateStr, img) {
+    const fs = require("fs");
+    const imgPath = process.env.MAP_CACHE_PATH + region + '/' + stateStr + '.png';
+    fs.writeFile(imgPath, img, (err) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log("file saved");
+    });
   }
   waitForElement();
 });
