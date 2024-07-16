@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>Ca-PEE-tal Tracker</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="/css/main.css" />
+	<noscript>
+		<link rel="stylesheet" href="/css/noscript.css" />
+	</noscript>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HEFMBYE34Y"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-HEFMBYE34Y');
+    </script>
+
+<%if (locals.isIndex) { %>
+
+    <script src="js/underscore-min.js"></script>
+    <script src="js/pluralize.js"></script>
+    <script src="js/data.app.js"></script>
+    <script src="js/logic.app.js"></script>
+
+    <script type="text/javascript">
+        google.charts.load('current', {
+            'packages': ['geochart'],
+            // Note: you will need to get a mapsApiKey for more than simple.
+            'mapsApiKey': 'AIzaSyCARIrIRh4GT-7tD7dVTmB2_nK3DzvNMuk'
+        });
+        google.charts.setOnLoadCallback(initMap);
+    </script>
+
+	<meta property="og:url" content="<%= fullUrl %>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="I've peed in <%= stateCount %> state <%= capitalStr %>: <%= stateListStr %>" />
+    <meta property="og:image" content="<%= imgUrl %>" />
+    <meta property="fb:app_id" content="953843409571390" />
+<% } %>
+
+
+</head>
+
+<body class="is-preload">
+
+	<!-- Header -->
+	<header id="header">
+		<a href="/" class="title">Ca-pee-tal Tracker</a>
+		<nav>
+			<ul>
+				<li><a href="/" <% if (locals.isIndex) { %>class="active"<% } %>>Home</a></li>
+				<li><a href="/about" <% if (locals.isAbout) { %>class="active"<% } %>>About</a></li>
+				<li><a href="/privacy" <% if (locals.isPrivacy) { %>class="active"<% } %>>Privacy</a></li>
+			</ul>
+		</nav>
+	</header>
