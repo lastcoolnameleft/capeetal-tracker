@@ -32,4 +32,13 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.get('/about', function(req, res, next) {
+  res.render('about');
+});
+
+router.get('/privacy', function(req, res, next) {
+  res.render('privacy');
+});
+
+
 module.exports = router;
