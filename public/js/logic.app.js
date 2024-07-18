@@ -37,7 +37,6 @@ function countActiveLocations(states) {
 }
 
 function toggleRegion(states, region) {
-    console.log("swapping " + region);
     stateIndex = findLocationIndex(states, region);
     if (stateIndex == -1) {
         console.log("Could not find location " + region);
@@ -112,11 +111,17 @@ function initMap() {
 
 // Don't care about response.  Just save the location and session (for de-dupe)
 function saveLocation(locations) {
+    const session = localStorage.getItem('SESSION');
+    if (!session || !locations) {
+        console.log("No session or location available to save");
+        return;
+    }
+
     $.ajax({
         type: "POST",
         url: '/api/save',
         data: {
-            session: localStorage.getItem('SESSION'),
+            session,
             region: 'US',
             locations,
         },
@@ -132,7 +137,7 @@ function drawRegionsMap() {
     updateView(states);
 
     google.visualization.events.addListener(chart, 'regionClick', function (r) {
-        console.log('You clicked on ' + r.region);
+        console.log('regionClick: ' + r.region);
         states = toggleRegion(states, r.region);
         var newData = generateData(states);
         chart.draw(newData, getOptions(states));
