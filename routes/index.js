@@ -48,5 +48,9 @@ router.get('/terms', function(req, res, next) {
   res.render('terms');
 });
 
+router.get('/stats', function(req, res, next) {
+  res.render('stats');
+});
+
 
 module.exports = router;

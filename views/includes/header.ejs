@@ -20,13 +20,12 @@
         gtag('config', 'G-HEFMBYE34Y');
     </script>
 
-<%if (locals.isIndex) { %>
+<%if (locals.isMap) { %>
 
-    <script src="js/underscore-min.js"></script>
-    <script src="js/pluralize.js"></script>
-    <script src="js/data.app.js"></script>
-    <script src="js/logic.app.js"></script>
-
+    <script src="/js/underscore-min.js"></script>
+    <script src="/js/pluralize.js"></script>
+    <script src="/js/data.app.js"></script>
+    <script src="/js/logic.app.js"></script>
     <script type="text/javascript">
         google.charts.load('current', {
             'packages': ['geochart'],
@@ -35,6 +34,8 @@
         });
         google.charts.setOnLoadCallback(initMap);
     </script>
+<% } %>
+<%if (locals.isIndex) { %>
 
 	<meta property="og:url" content="<%= fullUrl %>" />
     <meta property="og:type" content="website" />
@@ -50,10 +51,14 @@
 
 	<!-- Header -->
 	<header id="header">
-		<a href="/" class="title">Ca-pee-tal Tracker</a>
+		<center>
+		<img src="/images/yuri-n-ation.png" alt="Yuri N Ation" style="width: 100px; height: 100px;">
+		</center>
+		<a href="/" class="title" style="padding-top: 20px;">Ca-pee-tal Tracker</a>
 		<nav>
 			<ul>
 				<li><a href="/" <% if (locals.isIndex) { %>class="active"<% } %>>Home</a></li>
+				<li><a href="/stats" <% if (locals.isStats) { %>class="active"<% } %>>Stats</a></li>
 				<li><a href="/about" <% if (locals.isAbout) { %>class="active"<% } %>>About</a></li>
 			</ul>
 		</nav>

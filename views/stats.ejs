@@ -1,0 +1,48 @@
+<%- include ('includes/header.ejs', {isStats: true}) %>
+
+<script src="/js/data.app.js"></script>
+<script src="/js/logic.app.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {
+        'packages': ['geochart'],
+        // Note: you will need to get a mapsApiKey for more than simple.
+        'mapsApiKey': 'AIzaSyCARIrIRh4GT-7tD7dVTmB2_nK3DzvNMuk'
+    });
+    google.charts.setOnLoadCallback(initStatMap);
+
+    function initStatMap() {
+        $.getJSON('/data/stats/us.json', function(statHash) {
+            var countData = [['State', 'Count']];
+            for (var state in statHash) {
+                if (statHash.hasOwnProperty(state)) {
+                    var count = statHash[state];
+                    countData.push([state, count]);
+                }
+            }
+            var data = google.visualization.arrayToDataTable(countData);
+
+            var options = getBaseOptions();
+            options.legend = {textStyle: {color: 'blue', fontSize: 12}}
+
+            var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+            chart.draw(data, options);
+        });
+    }
+</script>
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+        <!-- Main -->
+        <section id="main" class="wrapper" >
+            <div class="inner" style="padding-top: 40px;">
+                <center>
+                    Most peed in states (updated daily)
+                    <div id="regions_div"></div>
+                    <br \>
+                </center>
+            </div>
+        </section>
+    </div>
+
+<%- include ('includes/footer.ejs') %>
