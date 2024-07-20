@@ -1,103 +1,115 @@
-function getOptions(states) {
-    var colors = ['#f5f5f5', '#e0b336'];
-    // This is hacky, but if there's no states selected, then Google Charts will show ALL states as selected.
-    if (countActiveLocations(states) == 0) {
-        colors = ['#f5f5f5'];
-    }
-    var options = {
+
+function getBaseOptions() {
+    return {
         region: 'US',
         displayMode: 'regions',
         resolution: 'provinces',
-        enableRegionInteractivity: true,
         legend: 'none',
         colorAxis: {
-            colors: colors,
+            colors: ['#f5f5f5', '#e0b336'],
         },
     };
+}
+
+function getOptions(regions) {
+    var options = getBaseOptions();
+    // This is hacky, but if there's no regions selected, then Google Charts will show ALL region as selected.
+    if (countActiveLocations(regions) == 0) {
+        options.colorAxis.colors = ['#f5f5f5'];
+    }
+    options.enableRegionInteractivity = true;
     return options;
 }
 
-function findLocationIndex(states, value) {
-    for (var i = 0; i < states.length; i++) {
-        if (states[i][0].v === value) {
+function findLocationIndex(regionArray, value) {
+    for (var i = 0; i < regionArray.length; i++) {
+        if (regionArray[i][0].v === value) {
             return i;
         }
     }
     return -1; // Return -1 if no match is found
 }
 
-function countActiveLocations(states) {
+function countActiveLocations(regions) {
     let count = 0;
-    for (let i = 0; i < states.length; i++) {
-        if (states[i][1] === 1) {
+    for (let i = 0; i < regions.length; i++) {
+        if (regions[i][1] === 1) {
             count++;
         }
     }
     return count;
 }
 
-function toggleRegion(states, region) {
-    stateIndex = findLocationIndex(states, region);
-    if (stateIndex == -1) {
+function toggleRegion(regionArray, region) {
+    index = findLocationIndex(regionArray, region);
+    if (index == -1) {
         console.log("Could not find location " + region);
-        return states;
+        return regionArray;
     }
-    if (states[stateIndex][1] == 0)
-        states[stateIndex][1] = 1
+    if (regionArray[index][1] == 0)
+        regionArray[index][1] = 1
     else
-        states[stateIndex][1] = 0
-    return states;
+        regionArray[index][1] = 0
+    return regionArray;
 }
 
-function generateData(states) {
+function generateGoogleDataTable(regions) {
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'State');
     data.addColumn('number', 'Value');
     data.addColumn({ type: 'string', role: 'tooltip' });
-    data.addRows(states);
+    data.addRows(regions);
     return data;
 }
 
-function updateView(states) {
-    activeStates = countActiveLocations(states);
-    totalStates = states.length;
-    $('#active_states').html(activeStates);
-    $('#total_states').html(totalStates);
-    $('#amount').html(getAmount(activeStates, totalStates, volumes, activeStates * 8));
+function updateView(regionArray) {
+    const activeRegions = countActiveLocations(regionArray);
+    const totalRegions = regionArray.length;
+    $('#active_states').html(activeRegions);
+    $('#total_states').html(totalRegions);
+    $('#amount').html(getAmount(activeRegions, totalRegions, volumes, activeRegions * 8));
 
     // Update the URL
-    const stateStr = states.filter(state => state[1] === 1).map(state => state[0].v).join(',');
+    const regionStr = regionArray.filter(region => region[1] === 1).map(region => region[0].v).join(',');
     var url = window.location.origin + window.location.pathname;
-    if (stateStr)
-            url += '?active=' + stateStr;
+    if (regionStr)
+            url += '?active=' + regionStr;
     window.history.replaceState(null, null, url);
-    saveLocation(stateStr);
+    sendLocationBeacon(regionStr);
 }
 
-function getAmount(activeStates, totalStates, volumes, amount) {
-    var percent = Math.round(activeStates / totalStates * 100);
+function getAmount(activeRegions, totalRegions, volumes, amount) {
+    var percent = Math.round(activeRegions / totalRegions * 100);
     var volKeys = Object.keys(volumes);
     var randKey = volKeys[volKeys.length * Math.random() << 0];
     var volume = Math.round(1000 * amount / volumes[randKey]) / 1000;
     return `You've peed in ${percent}% of states.  That is ~${amount} fluid ounces or ${volume} ${pluralize(randKey, volume)}.`;
 }
 
-function addVisitedLocations() {
+function addVisitedLocations(regionArray) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const visitedLocationsParam = urlParams.get('active');
-    if (!visitedLocationsParam) { return }
+    if (!visitedLocationsParam) { return regionArray }
     const visitedLocations = visitedLocationsParam.split(',');
-    if (!visitedLocations) { return }
+    if (!visitedLocations) { return regionArray }
     for (var locationIdx in visitedLocations) {
         var location = visitedLocations[locationIdx];
         console.log(location);
-        toggleRegion(states, location);
+        regionArray = toggleRegion(regionArray, location);
     }
+    return regionArray;
 }
 
-
+function transformHashToGoogleArray(hash) {
+    var regionArray = [];
+    for (const key in hash) {
+        regionArray.push([{ v: key, f: hash[key]}, 0, '']);
+    }
+    return regionArray;
+}
 function initMap() {
+
     // Create session
     if (!localStorage.getItem('SESSION')) {
         if (window.crypto.randomUUID) {
@@ -106,11 +118,12 @@ function initMap() {
             console.log("No randomUUID available");
         }
     }
-    drawRegionsMap();
+    regionArray = transformHashToGoogleArray(usStateHash);
+    drawRegionsMap(regionArray);
 }
 
 // Don't care about response.  Just save the location and session (for de-dupe)
-function saveLocation(locations) {
+function sendLocationBeacon(locations) {
     const session = localStorage.getItem('SESSION');
     if (!session || !locations) {
         console.log("No session or location available to save");
@@ -128,19 +141,19 @@ function saveLocation(locations) {
       });
 }
 
-function drawRegionsMap() {
-    addVisitedLocations();
-    var data = generateData(states);
+function drawRegionsMap(regionArray) {
+    var regionArray = addVisitedLocations(regionArray);
+    var drawData = generateGoogleDataTable(regionArray);
 
     var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
-    chart.draw(data, getOptions(states));
-    updateView(states);
+    chart.draw(drawData, getOptions(regionArray));
+    updateView(regionArray);
 
     google.visualization.events.addListener(chart, 'regionClick', function (r) {
         console.log('regionClick: ' + r.region);
-        states = toggleRegion(states, r.region);
-        var newData = generateData(states);
-        chart.draw(newData, getOptions(states));
-        updateView(states);
+        regionArray = toggleRegion(regionArray, r.region);
+        drawData = generateGoogleDataTable(regionArray);
+        chart.draw(drawData, getOptions(regionArray));
+        updateView(regionArray);
     });
 }

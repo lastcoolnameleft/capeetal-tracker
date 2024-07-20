@@ -12,6 +12,8 @@ services:
     volumes:
       - /data/capeetal-tracker-stg/db:/code/db
       - /data/capeetal-tracker-stg/map:/code/map
+      - /data/capeetal-tracker-stg/stats:/code/stats
     environment:
       - SQLITE_DB_PATH=/code/db/
       - MAP_CACHE_PATH=/code/map/
+      - STATS_PATH=/code/stats
