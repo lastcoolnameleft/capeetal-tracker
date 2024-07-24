@@ -16,4 +16,4 @@ services:
     environment:
       - SQLITE_DB_PATH=/code/db/
       - MAP_CACHE_PATH=/code/map/
-      - STATS_PATH=/code/stats
+      - STATS_PATH=/code/stats/

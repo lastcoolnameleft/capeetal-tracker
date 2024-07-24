@@ -30,7 +30,12 @@ router.post('/save', function(req, res, next) {
 });
 
 router.get('/refresh-stats/:region', function(req, res, next) {
+
   const region = req.params.region;
+
+  const regionHash = require(`../public/json/region/${region}.json`)
+  Object.keys(regionHash).forEach((i) => regionHash[i] = 0);
+
   const dbPath = process.env.SQLITE_DB_PATH + region.toLowerCase() + '.db';
   const db = new sqlite3.Database(dbPath);
   db.all(`SELECT locations FROM locations`, function(error, rows){
@@ -38,22 +43,17 @@ router.get('/refresh-stats/:region', function(req, res, next) {
           console.log('SQL ERROR: ' + error);
           next(error);
       } else {
-          var statsHash = {};
           rows.forEach(row => {
               var locations = row.locations.split(',');
               locations.forEach(location => {
-                  if (!statsHash[location]) {
-                      statsHash[location] = 0;
-                  }
-                  statsHash[location] += 1;
+                  regionHash[location] += 1;
               });
           });
           const statfile = process.env.STATS_PATH + region.toLowerCase() + '.json';
           console.log('Writing stats to ' + statfile);
-          fs.writeFileSync(statfile, 
-            JSON.stringify(statsHash));
+          fs.writeFileSync(statfile, JSON.stringify(regionHash));
           // /data/stats/us.json
-          res.send(statsHash);
+          res.send(regionHash);
       }
   });
 });
