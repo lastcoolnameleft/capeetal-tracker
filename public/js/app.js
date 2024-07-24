@@ -62,12 +62,12 @@ function generateGoogleDataTable(regions) {
     return data;
 }
 
-function updateView(regionArray) {
+function updateView(regionArray, volumeHash) {
     const activeRegions = countActiveLocations(regionArray);
     const totalRegions = regionArray.length;
     $('#active_states').html(activeRegions);
     $('#total_states').html(totalRegions);
-    $('#amount').html(getAmount(activeRegions, totalRegions, volumes, activeRegions * 8));
+    $('#amount').html(getAmount(activeRegions, totalRegions, volumeHash, activeRegions * 8));
 
     // Update the URL
     const regionStr = regionArray.filter(region => region[1] === 1).map(region => region[0].v).join(',');
@@ -78,11 +78,11 @@ function updateView(regionArray) {
     sendLocationBeacon(regionStr);
 }
 
-function getAmount(activeRegions, totalRegions, volumes, amount) {
+function getAmount(activeRegions, totalRegions, volumeHash, amount) {
     var percent = Math.round(activeRegions / totalRegions * 100);
-    var volKeys = Object.keys(volumes);
+    var volKeys = Object.keys(volumeHash);
     var randKey = volKeys[volKeys.length * Math.random() << 0];
-    var volume = Math.round(1000 * amount / volumes[randKey]) / 1000;
+    var volume = Math.round(1000 * amount / volumeHash[randKey]) / 1000;
     return `You've peed in ${percent}% of states.  That is ~${amount} fluid ounces or ${volume} ${pluralize(randKey, volume)}.`;
 }
 
@@ -95,7 +95,6 @@ function addVisitedLocations(regionArray) {
     if (!visitedLocations) { return regionArray }
     for (var locationIdx in visitedLocations) {
         var location = visitedLocations[locationIdx];
-        console.log(location);
         regionArray = toggleRegion(regionArray, location);
     }
     return regionArray;
@@ -108,18 +107,23 @@ function transformHashToGoogleArray(hash) {
     }
     return regionArray;
 }
-function initMap() {
 
-    // Create session
-    if (!localStorage.getItem('SESSION')) {
-        if (window.crypto.randomUUID) {
-            localStorage.setItem('SESSION', window.crypto.randomUUID());
-        } else {
-            console.log("No randomUUID available");
+function initMap() {
+    const region = fetch('/json/region/us.json').then(res => res.json());
+    const volume = fetch('/json/volumes.json').then(res => res.json());
+
+    Promise.all([region, volume]).then(([regionHash, volumeHash]) => {
+        // Create session
+        if (!localStorage.getItem('SESSION')) {
+            if (window.crypto.randomUUID) {
+                localStorage.setItem('SESSION', window.crypto.randomUUID());
+            } else {
+                console.log("No randomUUID available");
+            }
         }
-    }
-    regionArray = transformHashToGoogleArray(usStateHash);
-    drawRegionsMap(regionArray);
+        regionArray = transformHashToGoogleArray(regionHash);
+        drawRegionsMap(regionArray, volumeHash);
+    });
 }
 
 // Don't care about response.  Just save the location and session (for de-dupe)
@@ -141,19 +145,19 @@ function sendLocationBeacon(locations) {
       });
 }
 
-function drawRegionsMap(regionArray) {
+function drawRegionsMap(regionArray, volumeHash) {
     var regionArray = addVisitedLocations(regionArray);
     var drawData = generateGoogleDataTable(regionArray);
 
     var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
     chart.draw(drawData, getOptions(regionArray));
-    updateView(regionArray);
+    updateView(regionArray, volumeHash);
 
     google.visualization.events.addListener(chart, 'regionClick', function (r) {
         console.log('regionClick: ' + r.region);
         regionArray = toggleRegion(regionArray, r.region);
         drawData = generateGoogleDataTable(regionArray);
         chart.draw(drawData, getOptions(regionArray));
-        updateView(regionArray);
+        updateView(regionArray, volumeHash);
     });
 }
