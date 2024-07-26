@@ -91,6 +91,7 @@ jobs:
         script: |
           echo "Starting stg rollout"
           cd ${{ env.VM_DIR }}
+          docker system prune -f
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           docker rollout -f docker-compose-stg.yaml --env-file staging.env capeetal-tracker-stg
           #echo "Starting prod rollout"
