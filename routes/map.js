@@ -4,15 +4,23 @@ const jsdom = require("jsdom");
 const fs = require("fs");
 const stateHelper = require("./helpers/states");
 
+var loopCount = 0;
 /* GET home page. */
-router.get("/:region/:state.png", function (req, res, next) {
+router.get("/:region/:states.png", function (req, res, next) {
   console.log("map route");
   var region = req.params.region;
-  var states = req.params.state.split("-");
-  var loopCount = 0;
-  states = stateHelper.filterStates(states);  
-  var stateStr = '[\'' + states.join('\',\'') + '\']';
-  const imgPath = process.env.MAP_CACHE_PATH + region + '/' + states.join('-').toLocaleLowerCase() + '.png';
+  const statesParam = req.params.states;
+
+  var imgPath, stateStr;
+  if (!statesParam || statesParam == 'empty') {
+    imgPath = process.env.MAP_CACHE_PATH + region + '/empty.png';
+    stateStr = '[]';
+  } else {
+    var states = req.params.states.split("-");
+    states = stateHelper.filterStates(states);
+    stateStr = '[\'' + states.join('\',\'') + '\']';
+    imgPath = process.env.MAP_CACHE_PATH + region + '/' + states.join('-').toLocaleLowerCase() + '.png';
+  }
   console.log(imgPath);
 
   if (fs.existsSync(imgPath)) {
