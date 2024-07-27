@@ -83,7 +83,7 @@ function getAmount(activeRegions, totalRegions, volumeHash, amount) {
     var volKeys = Object.keys(volumeHash);
     var randKey = volKeys[volKeys.length * Math.random() << 0];
     var volume = Math.round(1000 * amount / volumeHash[randKey]) / 1000;
-    return `You've peed in ${percent}% of states.  That is ~${amount} fluid ounces or ${volume} ${pluralize(randKey, volume)}.`;
+    return `You've peed in ${percent}% of states.<br>  That is ~${amount} fluid ounces or ${volume} ${pluralize(randKey, volume)}.`;
 }
 
 function addVisitedLocations(regionArray) {

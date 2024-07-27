@@ -32,18 +32,21 @@
                         <li><a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcapeetaltracker.com%2F&quote="
                                 title="Share on Facebook" target="_blank"
                                 onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(document.URL) + '&quote=' + encodeURIComponent(document.URL)); return false;"><img
-                                    alt="Share on Facebook" src="/images/share/icons8-facebook.svg" /></a></li>
+                                    alt="Share on Facebook" src="/images/share/capeetal_fb.png" /></a></li>
                         <li><a href="mailto:?subject=&body=:%20https%3A%2F%2Fcapeetaltracker.com%2F" target="_blank"
                                 title="Send email"
                                 onclick="window.open('mailto:?subject=' + encodeURIComponent(document.title) + '&body=' +  encodeURIComponent(document.URL)); return false;"><img
-                                    alt="Send email" src="images/share/Email.svg" /></a></li>
+                                    alt="Send email" src="images/share/capeetal_email.png" /></a></li>
+                        <li><a href="http://www.tumblr.com/share?v=3&u=https%3A%2F%2Fcapeetaltracker.com&quote=&s="
+                                target="_blank" title="Post to Tumblr"
+                                onclick="window.open('http://www.tumblr.com/share?v=3&u=' + encodeURIComponent(document.URL) + '&quote=' +  encodeURIComponent(document.title)); return false;"><img
+                                    alt="Post to Tumblr" src="images/share/capeetal_tumblr.png" /></a></li>
                         <li>
                             <div class="tooltip">
-                                <button onclick="copyButton()" onmouseout="outFunc()">
-                                  <span class="tooltiptext" id="myTooltip">Press to copy</span>
-                                  Copy URL
-                                  </button>
-                                </div>
+                                <img src="/images/share/capeetal_link.png" onclick="copyButton()"
+                                    onmouseout="outFunc()">
+                                <span class="tooltiptext" id="myTooltip">Press to copy</span>
+                            </div>
                         </li>
                     </ul>
                 </center>

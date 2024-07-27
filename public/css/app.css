@@ -59,3 +59,27 @@ ul.share-buttons{
     visibility: visible;
     opacity: 1;
   }
+
+
+@font-face { 
+    font-family: 'MyFont'; 
+    src: 
+        url('/fonts/Muloka-Kerash.otf')  
+        format('opentype'); 
+    font-weight: normal; 
+    font-style: normal; 
+} 
+
+body { 
+    font-family: 'MyFont', sans-serif; 
+    text-align: center; 
+    background-image: url("/images/bigtile.png");
+    background-repeat: repeat-x;
+    background-size: 250px;
+}
+
+header {
+    background-image: url("/images/mosaictile.png");
+    background-repeat: repeat-x;
+    background-size: 250px;
+}

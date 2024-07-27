@@ -3370,14 +3370,13 @@ input, select, textarea {
 		display: -webkit-flex;
 		display: -ms-flex;
 		display: flex;
-		background-color: #5e42a6;
 		cursor: default;
 		padding: 1.75em 2em;
 	}
 
 		#header > .title {
 			border: 0;
-			color: #ffffff;
+			color: #000000;
 			display: block;
 			font-size: 1.25em;
 			font-weight: bold;
@@ -3409,7 +3408,7 @@ input, select, textarea {
 
 					#header > nav > ul > li a {
 						border: 0;
-						color: rgba(255, 255, 255, 0.35);
+						color: #000000;
 						display: inline-block;
 						font-size: 0.6em;
 						font-weight: bold;
@@ -3418,11 +3417,11 @@ input, select, textarea {
 					}
 
 						#header > nav > ul > li a:hover {
-							color: rgba(255, 255, 255, 0.55);
+							color: #FFCC29;
 						}
 
 						#header > nav > ul > li a.active {
-							color: #ffffff;
+							color: #000000;
 						}
 
 		@media screen and (max-width: 736px) {
