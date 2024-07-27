@@ -17,7 +17,7 @@ router.get("/:region/:states.png", function (req, res, next) {
     stateStr = '[]';
   } else {
     var states = req.params.states.split("-");
-    states = stateHelper.filterStates(states);
+    states = stateHelper.filterStates(states);  
     stateStr = '[\'' + states.join('\',\'') + '\']';
     imgPath = process.env.MAP_CACHE_PATH + region + '/' + states.join('-').toLocaleLowerCase() + '.png';
   }
