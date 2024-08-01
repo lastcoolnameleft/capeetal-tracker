@@ -14,9 +14,13 @@ router.get('/', function(req, res, next) {
     states = states.split(',').map(state => state.slice(3).toUpperCase());
     states = stateHelper.filterStates(states);
     imgPath = '/map/us/' + states.join('-') + '.png';
+    imgWidth = 521;
+    imgHeight = 777;
   } else {
     states = [];
     imgPath = '/map/us/empty.png';
+    imgWidth = 521;
+    imgHeight = 320;
   }
   var imgUrl = req.protocol + '://' + req.get('host') + imgPath;
 
@@ -26,6 +30,8 @@ router.get('/', function(req, res, next) {
     title: 'Ca-PEE-tal Tracker',
     fullUrl,
     imgUrl,
+    imgWidth,
+    imgHeight,
     stateListStr,
     stateCount,
     capitalStr: pluralize('capital', stateCount),
