@@ -6,22 +6,24 @@ var Jimp = require("jimp");
 const stateHelper = require("./helpers/states");
 
 var loopCount = 0;
-const backgroundImgPath = process.env.MAP_CACHE_PATH + 'capeetal_lookatmemap.png';
+const backgroundImgPath = process.env.MAP_CACHE_PATH + 'background.png';
 
 /* GET home page. */
 router.get("/:region/:states.png", function (req, res, next) {
   console.log("map route");
   var region = req.params.region;
   const statesParam = req.params.states;
-  sendImageBuffer(region, statesParam, res);
+  const noCache = req.query.nocache;
+  sendImageBuffer(region, statesParam, noCache, res);
 });
 
 // We want to store 2 different files.  The background image and the generated map
 // We overlay the generated map on top of the background image and then save each file separately
 // That way if we update the background image, we don't need to re-generate that (which takes about 1-2 sec and makes sharing seem slow)
 // NOTE:  It takes about 4.2 seconds to generate the image from scratch.  3 sec to perform the overlay
-function sendImageBuffer(region, statesParam, res) {
+function sendImageBuffer(region, statesParam, noCache, res) {
   const gchartBasePath = process.env.MAP_CACHE_PATH + 'gchart/' + region;
+  const overlayBasePath = process.env.MAP_CACHE_PATH + 'overlay/' + region;
   const emptyStatePath = process.env.MAP_CACHE_PATH + 'empty.png';
 
   // We send back a different file if there's no states
@@ -33,17 +35,33 @@ function sendImageBuffer(region, statesParam, res) {
   var states = statesParam.split("-");
   states = stateHelper.filterStates(states);
   var stateStr = '[\'' + states.join('\',\'') + '\']';
+  overlayImgPath = overlayBasePath + '/' + states.join('-').toLocaleLowerCase() + '.png';
   gchartImgPath = gchartBasePath + '/' + states.join('-').toLocaleLowerCase() + '.png';
 
-  // If gchart exists reutrn
-  if (fs.existsSync(gchartImgPath)) { 
-      returnMapFile(res, gchartImgPath);
+  // Send the overlay image if it exists
+  if (fs.existsSync(overlayImgPath) && !noCache) {
+    console.log(`sending overlay cache for ${overlayImgPath}`);
+    returnMapFile(res, overlayImgPath);
+  } 
+  // If the overlay doesn't exist, but the gchart does, we need to generate the overlay
+  else if (fs.existsSync(gchartImgPath) && !noCache) { 
+    console.log(`overlay cache doesn't exist, but gchart does: ${gchartImgPath}`);
+    imageOverlay(gchartImgPath).then((imgOverlayBuffer) => {
+      console.log(`Saving overlay image at ${overlayImgPath}`);
+      fs.writeFile(overlayImgPath, imgOverlayBuffer, (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        returnMapFile(res, overlayImgPath);
+      });
+    })
   } 
   // If neither the overlay or gchart exists, we need to generate both
   else {
     console.log("no cache exists.  Starting from scratch");
     const domObj = getDOMObj(stateStr);
-    waitForElement(domObj, res, gchartImgPath);
+    waitForElement(domObj, res, gchartImgPath, overlayImgPath);
   }
 }
 
@@ -54,7 +72,7 @@ function returnMapFile(res, imgPath) {
     return;
 }
 
-function waitForElement(dom, res, gchartImgPath) {
+function waitForElement(dom, res, gchartImgPath, overlayImgPath) {
   loopCount++;
   console.log("loop");
   //console.log(dom.window.document.getElementById('chart_img'));
@@ -69,7 +87,7 @@ function waitForElement(dom, res, gchartImgPath) {
       res.send("timeout");
       return;
     }
-    setTimeout(waitForElement.bind(null, dom, res, gchartImgPath), 100);
+    setTimeout(waitForElement.bind(null, dom, res, gchartImgPath, overlayImgPath), 100);
   } else {
     console.log("it exists now!");
     //console.log(dom.window.document.getElementById('chart_img'));
@@ -86,19 +104,29 @@ function waitForElement(dom, res, gchartImgPath) {
         console.error(err);
         return;
       }
-      returnMapFile(res, gchartImgPath);
     });
+    
+    imageOverlay(gchartImgBuffer).then((imgOverlayBuffer) => {
+      console.log(`Saving overlay image at ${overlayImgPath}`);
+      fs.writeFile(overlayImgPath, imgOverlayBuffer, (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        returnMapFile(res, overlayImgPath);
+      });
+    })
   }
 }
 
 async function imageOverlay(imageOverlayFile) { // Function name is same as of file
   // Reading watermark Image
   let watermark = await Jimp.read(imageOverlayFile);
-  watermark = watermark.resize(4700, 3125); // Resizing watermark image
+  //watermark = watermark.resize(4700, 3125); // Resizing watermark image
   // Reading original image
   const image = await Jimp.read(backgroundImgPath);
   watermark = await watermark
-  image.composite(watermark, 250, 1500, {
+  image.composite(watermark, 22, 200, {
     mode: Jimp.BLEND_SOURCE_OVER,
     opacityDest: 1,
     opacitySource: 1
