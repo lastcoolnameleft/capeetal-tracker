@@ -6,7 +6,7 @@ var Jimp = require("jimp");
 const stateHelper = require("./helpers/states");
 
 var loopCount = 0;
-const backgroundImgPath = '/Users/thfalgou/git/lastcoolnameleft/capeetal-tracker/public/images/share/capeetal_lookatmemap.png';
+const backgroundImgPath = process.env.MAP_CACHE_PATH + 'capeetal_lookatmemap.png';
 
 /* GET home page. */
 router.get("/:region/:states.png", function (req, res, next) {
