@@ -22,7 +22,6 @@ router.get("/:region/:states.png", function (req, res, next) {
 // NOTE:  It takes about 4.2 seconds to generate the image from scratch.  3 sec to perform the overlay
 function sendImageBuffer(region, statesParam, res) {
   const gchartBasePath = process.env.MAP_CACHE_PATH + 'gchart/' + region;
-  const overlayBasePath = process.env.MAP_CACHE_PATH + 'overlay/' + region;
   const emptyStatePath = process.env.MAP_CACHE_PATH + 'empty.png';
 
   // We send back a different file if there's no states
@@ -34,33 +33,17 @@ function sendImageBuffer(region, statesParam, res) {
   var states = statesParam.split("-");
   states = stateHelper.filterStates(states);
   var stateStr = '[\'' + states.join('\',\'') + '\']';
-  overlayImgPath = overlayBasePath + '/' + states.join('-').toLocaleLowerCase() + '.png';
   gchartImgPath = gchartBasePath + '/' + states.join('-').toLocaleLowerCase() + '.png';
 
-  // Send the overlay image if it exists
-  if (fs.existsSync(overlayImgPath)) {
-    console.log(`sending overlay cache for ${overlayImgPath}`);
-    returnMapFile(res, overlayImgPath);
-  } 
-  // If the overlay doesn't exist, but the gchart does, we need to generate the overlay
-  else if (fs.existsSync(gchartImgPath)) { 
-    console.log(`overlay cache doesn't exist, but gchart does: ${gchartImgPath}`);
-    imageOverlay(gchartImgPath).then((imgOverlayBuffer) => {
-      console.log(`Saving overlay image at ${overlayImgPath}`);
-      fs.writeFile(overlayImgPath, imgOverlayBuffer, (err) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        returnMapFile(res, overlayImgPath);
-      });
-    })
+  // If gchart exists reutrn
+  if (fs.existsSync(gchartImgPath)) { 
+      returnMapFile(res, gchartImgPath);
   } 
   // If neither the overlay or gchart exists, we need to generate both
   else {
     console.log("no cache exists.  Starting from scratch");
     const domObj = getDOMObj(stateStr);
-    waitForElement(domObj, res, gchartImgPath, overlayImgPath);
+    waitForElement(domObj, res, gchartImgPath);
   }
 }
 
@@ -71,7 +54,7 @@ function returnMapFile(res, imgPath) {
     return;
 }
 
-function waitForElement(dom, res, gchartImgPath, overlayImgPath) {
+function waitForElement(dom, res, gchartImgPath) {
   loopCount++;
   console.log("loop");
   //console.log(dom.window.document.getElementById('chart_img'));
@@ -86,7 +69,7 @@ function waitForElement(dom, res, gchartImgPath, overlayImgPath) {
       res.send("timeout");
       return;
     }
-    setTimeout(waitForElement.bind(null, dom, res, gchartImgPath, overlayImgPath), 100);
+    setTimeout(waitForElement.bind(null, dom, res, gchartImgPath), 100);
   } else {
     console.log("it exists now!");
     //console.log(dom.window.document.getElementById('chart_img'));
@@ -103,18 +86,8 @@ function waitForElement(dom, res, gchartImgPath, overlayImgPath) {
         console.error(err);
         return;
       }
+      returnMapFile(res, gchartImgPath);
     });
-    
-    imageOverlay(gchartImgBuffer).then((imgOverlayBuffer) => {
-      console.log(`Saving overlay image at ${overlayImgPath}`);
-      fs.writeFile(overlayImgPath, imgOverlayBuffer, (err) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        returnMapFile(res, overlayImgPath);
-      });
-    })
   }
 }
 

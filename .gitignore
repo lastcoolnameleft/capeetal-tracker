@@ -136,3 +136,4 @@ dist
 data
 *.swp
 .DS_Store
+*.ignore
