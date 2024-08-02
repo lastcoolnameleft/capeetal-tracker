@@ -17,3 +17,9 @@ services:
       - SQLITE_DB_PATH=/code/db/
       - MAP_CACHE_PATH=/code/map/
       - STATS_PATH=/code/stats/
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s

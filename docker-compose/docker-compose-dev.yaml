@@ -1,0 +1,22 @@
+version: "3.4"
+
+services:
+  capeetal-tracker-dev:
+    build:
+      context: ..
+    ports:
+    - "127.0.0.1:3000:3000"
+    volumes:
+      - $PWD/data/db:/code/db
+      - $PWD/data/map:/code/map
+      - $PWD/data/stats:/code/stats
+    environment:
+      - SQLITE_DB_PATH=/code/db/
+      - MAP_CACHE_PATH=/code/map/
+      - STATS_PATH=/code/stats/
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
