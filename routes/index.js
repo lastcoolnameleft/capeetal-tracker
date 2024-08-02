@@ -14,8 +14,8 @@ router.get('/', function(req, res, next) {
     states = states.split(',').map(state => state.slice(3).toUpperCase());
     states = stateHelper.filterStates(states);
     imgPath = '/map/us/' + states.join('-') + '.png';
-    imgWidth = 521;
-    imgHeight = 777;
+    imgWidth = 556; // overlay = 521;
+    imgHeight = 347; // overlay = 777;
   } else {
     states = [];
     imgPath = '/map/us/empty.png';
