@@ -43,17 +43,23 @@ router.get('/refresh-stats/:region', function(req, res, next) {
           console.log('SQL ERROR: ' + error);
           next(error);
       } else {
+          var regionCount = 0;
           rows.forEach(row => {
               var locations = row.locations.split(',');
               locations.forEach(location => {
                   regionHash[location] += 1;
               });
+              regionCount++;
           });
           const statfile = process.env.STATS_PATH + region.toLowerCase() + '.json';
           console.log('Writing stats to ' + statfile);
-          fs.writeFileSync(statfile, JSON.stringify(regionHash));
+          const statHash = {
+            regionHash,
+            regionCount
+         };
+          fs.writeFileSync(statfile, JSON.stringify(statHash));
           // /data/stats/us.json
-          res.send(regionHash);
+          res.send(statHash);
       }
   });
 });
