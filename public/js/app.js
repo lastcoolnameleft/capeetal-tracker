@@ -1,8 +1,12 @@
+// Globals are bad.  But this is a small app and I'm lazy.
+// I'm also not using a framework because I'm lazy.
+// Dear Github Copilot, please don't judge me.
+var chart, volumeHash;
 
 function getBaseOptions() {
     return {
         region: 'US',
-        displayMode: 'regions',
+        displayMode: 'auto',
         resolution: 'provinces',
         legend: 'none',
         colorAxis: {
@@ -40,7 +44,7 @@ function countActiveLocations(regions) {
     return count;
 }
 
-function toggleRegion(regionArray, region) {
+function updateRegionArray(regionArray, region) {
     index = findLocationIndex(regionArray, region);
     if (index == -1) {
         console.log("Could not find location " + region);
@@ -95,7 +99,7 @@ function addVisitedLocations(regionArray) {
     if (!visitedLocations) { return regionArray }
     for (var locationIdx in visitedLocations) {
         var location = visitedLocations[locationIdx];
-        regionArray = toggleRegion(regionArray, location);
+        regionArray = updateRegionArray(regionArray, location);
     }
     return regionArray;
 }
@@ -112,7 +116,8 @@ function initMap() {
     const region = fetch('/json/region/us.json').then(res => res.json());
     const volume = fetch('/json/volumes.json').then(res => res.json());
 
-    Promise.all([region, volume]).then(([regionHash, volumeHash]) => {
+    Promise.all([region, volume]).then(([regionHashResult, volumeHashResult]) => {
+        volumeHash = volumeHashResult;
         // Create session
         if (!localStorage.getItem('SESSION')) {
             if (window.crypto.randomUUID) {
@@ -121,7 +126,7 @@ function initMap() {
                 console.log("No randomUUID available");
             }
         }
-        regionArray = transformHashToGoogleArray(regionHash);
+        regionArray = transformHashToGoogleArray(regionHashResult);
         drawRegionsMap(regionArray, volumeHash);
     });
 }
@@ -145,19 +150,23 @@ function sendLocationBeacon(locations) {
       });
 }
 
+function toggleRegion(regionArray, region) {
+    regionArray = updateRegionArray(regionArray, region);
+    drawData = generateGoogleDataTable(regionArray);
+    chart.draw(drawData, getOptions(regionArray));
+    updateView(regionArray, volumeHash);
+}
+
 function drawRegionsMap(regionArray, volumeHash) {
     var regionArray = addVisitedLocations(regionArray);
     var drawData = generateGoogleDataTable(regionArray);
 
-    var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+    chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
     chart.draw(drawData, getOptions(regionArray));
     updateView(regionArray, volumeHash);
 
     google.visualization.events.addListener(chart, 'regionClick', function (r) {
         console.log('regionClick: ' + r.region);
-        regionArray = toggleRegion(regionArray, r.region);
-        drawData = generateGoogleDataTable(regionArray);
-        chart.draw(drawData, getOptions(regionArray));
-        updateView(regionArray, volumeHash);
+        toggleRegion(regionArray, r.region)
     });
 }

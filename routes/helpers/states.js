@@ -1,6 +1,58 @@
-exports.allStates = ['US-AK', 'US-AL', 'US-AZ', 'US-AR', 'US-CA', 'US-CO', 'US-CT', 'US-DE', 'US-FL', 'US-GA', 'US-HI', 'US-ID', 'US-IL', 'US-IN', 'US-IA', 'US-KS', 'US-KY', 'US-LA', 'US-ME', 'US-MD', 'US-MA', 'US-MI', 'US-MN', 'US-MS', 'US-MO', 'US-MT', 'US-NE', 'US-NV', 'US-NH', 'US-NJ', 'US-NM', 'US-NY', 'US-NC', 'US-ND', 'US-OH', 'US-OK', 'US-OR', 'US-PA', 'US-RI', 'US-SC', 'US-SD', 'US-TN', 'US-TX', 'US-UT', 'US-VT', 'US-VA', 'US-WA', 'US-WV', 'US-WI', 'US-WY'];
-
 exports.filterStates = function(active) {
+    const allKeys = Object.keys(exports.allStateCapitals); 
     return active.filter(state => 
-        exports.allStates.includes(state.toLocaleUpperCase()) || exports.allStates.includes('US-' + state.toLocaleUpperCase())).sort();
+        allKeys.includes(state.toLocaleUpperCase()) || allKeys.includes('US-' + state.toLocaleUpperCase())).sort();
+};
+
+exports.allStateCapitals = {
+    "US-AK": "Juneau, AK",
+    "US-AL": "Montgomery, AL",
+    "US-AR": "Little Rock, AR",
+    "US-AZ": "Phoenix, AZ",
+    "US-CA": "Sacramento, CA",
+    "US-CO": "Denver, CO",
+    "US-CT": "Hartford, CT",
+    "US-DE": "Dover, DE",
+    "US-FL": "Tallahassee, FL",
+    "US-GA": "Atlanta, GA",
+    "US-HI": "Honolulu, HI",
+    "US-IA": "Des Moines, IA",
+    "US-ID": "Boise, ID",
+    "US-IL": "Springfield, IL",
+    "US-IN": "Indianapolis, IN",
+    "US-KS": "Topeka, KS",
+    "US-KY": "Frankfort, KY",
+    "US-LA": "Baton Rouge, LA",
+    "US-MA": "Boston, MA",
+    "US-MD": "Annapolis, MD",
+    "US-ME": "Augusta, ME",
+    "US-MI": "Lansing, MI",
+    "US-MN": "Saint Paul, MN",
+    "US-MO": "Jefferson City, MO",
+    "US-MS": "Jackson, MS",
+    "US-MT": "Helena, MT",
+    "US-NC": "Raleigh, NC",
+    "US-NE": "Lincoln, NE",
+    "US-NH": "Concord, NH",
+    "US-NJ": "Trenton, NJ",
+    "US-NM": "Santa Fe, NM",
+    "US-NV": "Carson City, NV",
+    "US-NY": "Albany, NY",
+    "US-ND": "Bismarck, ND",
+    "US-OH": "Columbus, OH",
+    "US-OK": "Oklahoma City, OK",
+    "US-OR": "Salem, OR",
+    "US-PA": "Harrisburg, PA",
+    "US-RI": "Providence, RI",
+    "US-SC": "Columbia, SC",
+    "US-SD": "Pierre, SD",
+    "US-TN": "Nashville, TN",
+    "US-TX": "Austin, TX",
+    "US-UT": "Salt Lake City, UT",
+    "US-VA": "Richmond, VA",
+    "US-VT": "Montpelier, VT",
+    "US-WA": "Olympia, WA",
+    "US-WI": "Madison, WI",
+    "US-WV": "Charleston, WV",
+    "US-WY": "Cheyenne, WY"
 };
