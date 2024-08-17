@@ -26,6 +26,14 @@
                     Welcome to the Ca-PEE-tal tracker where you track each US state capital you've urinated!
                     <h2 id="amount"></h2>
                     <div id="regions_div"></div>
+                    <div class="dropdown">
+                        <button class="dropbtn">State Capitals <i class="arrow down"></i></button>
+                        <div class="dropdown-content">
+                            <% for (const [code, name] of Object.entries(regionHash)) { %>
+                                <a onclick="toggleRegion(regionArray, '<%= code %>');"><%= name %></a>
+                            <% } %>
+                        </div>
+                      </div>
                     <br \>
                     Share on:
                     <ul class="share-buttons" data-source="simplesharingbuttons.com">

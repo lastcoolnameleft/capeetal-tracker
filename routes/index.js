@@ -5,36 +5,39 @@ const stateHelper = require('./helpers/states');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  const region = 'us';
   var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-  var states = req.query['active'];
+  var activeRegions = req.query['active'];
 
   var imgPath;
   // Expecting a string like 'US-CA,US-NY'
-  if (states) {
-    states = states.split(',').map(state => state.slice(3).toUpperCase());
-    states = stateHelper.filterStates(states);
-    imgPath = '/map/us/' + states.join('-') + '.png';
+  if (activeRegions) {
+    activeRegions = activeRegions.split(',').map(activeRegion => activeRegion.slice(3).toUpperCase());
+    activeRegions = stateHelper.filterStates(activeRegions);
+    imgPath = '/map/us/' + activeRegions.join('-') + '.png';
     imgWidth = 600;
     imgHeight = 894;
   } else {
-    states = [];
+    activeRegions = [];
     imgPath = '/map/us/empty.png';
     imgWidth = 521;
     imgHeight = 320;
   }
   var imgUrl = req.protocol + '://' + req.get('host') + imgPath;
 
-  var stateListStr = states.join(', ');
-  var stateCount = states.length;
+  var activeRegionListStr = activeRegions.join(', ');
+  var activeRegionCount = activeRegions.length;
+  const regionHash = require(`../public/json/region/${region}.json`);
   res.render('index', { 
     title: 'Ca-PEE-tal Tracker',
     fullUrl,
     imgUrl,
     imgWidth,
     imgHeight,
-    stateListStr,
-    stateCount,
-    capitalStr: pluralize('capital', stateCount),
+    regionHash,
+    stateListStr: activeRegionListStr,
+    stateCount: activeRegionCount,
+    capitalStr: pluralize('capital', activeRegionCount),
   });
 });
 
