@@ -150,11 +150,24 @@ function sendLocationBeacon(locations) {
       });
 }
 
+function updateDropdowns(regionArray) {
+    for (var i = 0; i < regionArray.length; i++) {
+        const key = regionArray[i][0].v.toLowerCase();
+        if (regionArray[i][1] == 1) {
+            document.getElementById("dropdown-item-" + key).classList.add('dropdown-content-selected');
+        } else {
+            document.getElementById("dropdown-item-" + key).classList.remove('dropdown-content-selected');
+        }
+    }
+}
+
 function toggleRegion(regionArray, region) {
+    console.log("Toggling region " + region);
     regionArray = updateRegionArray(regionArray, region);
     drawData = generateGoogleDataTable(regionArray);
     chart.draw(drawData, getOptions(regionArray));
     updateView(regionArray, volumeHash);
+    updateDropdowns(regionArray);
 }
 
 function drawRegionsMap(regionArray, volumeHash) {
