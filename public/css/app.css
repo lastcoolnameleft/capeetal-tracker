@@ -73,9 +73,6 @@ ul.share-buttons{
 body { 
     font-family: 'MyFont', sans-serif; 
     text-align: center; 
-    background-image: url("/images/bigtile.png");
-    background-repeat: repeat-x;
-    background-size: 250px;
 }
 
 header {
@@ -151,5 +148,4 @@ header {
 .center {
   margin: auto;
   width: 50%;
-  padding: 10px;
 }
