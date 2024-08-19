@@ -75,10 +75,11 @@ function updateView(regionArray, volumeHash) {
 
     // Update the URL
     const regionStr = regionArray.filter(region => region[1] === 1).map(region => region[0].v).join(',');
+    localStorage.setItem("activeRegionsStr", regionStr);
     var url = window.location.origin + window.location.pathname;
     if (regionStr)
             url += '?active=' + regionStr;
-    window.history.replaceState(null, null, url);
+    //window.history.replaceState(null, null, url);
     sendLocationBeacon(regionStr);
 }
 
@@ -87,14 +88,26 @@ function getAmount(activeRegions, totalRegions, volumeHash, amount) {
     var volKeys = Object.keys(volumeHash);
     var randKey = volKeys[volKeys.length * Math.random() << 0];
     var volume = Math.round(1000 * amount / volumeHash[randKey]) / 1000;
-    return `You've peed in ${percent}% of states.<br>  That is ~${amount} fluid ounces or ${volume} ${pluralize(randKey, volume)}.`;
+    if (is_share_page) {
+        return `I've peed in ${percent}% of states.<br>  That is ~${amount} fluid ounces or ${volume} ${pluralize(randKey, volume)}.` 
+            + `<br \><a href='/'>Create your own map by clicking here!</a>`;
+    } else {
+        return `You've peed in ${percent}% of states.<br>  That is ~${amount} fluid ounces or ${volume} ${pluralize(randKey, volume)}.`;
+    }
 }
 
 function addVisitedLocations(regionArray) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const visitedLocationsParam = urlParams.get('active');
-    if (!visitedLocationsParam) { return regionArray }
+    var visitedLocationsParam = urlParams.get('active');
+    // If we can't get it from the URL, try local storage
+    if (!visitedLocationsParam) {
+        visitedLocationsParam = localStorage.getItem('activeRegionsStr');
+        // If we still can't get it, return the default
+        if (!visitedLocationsParam) {
+            return regionArray
+        }
+    }
     const visitedLocations = visitedLocationsParam.split(',');
     if (!visitedLocations) { return regionArray }
     for (var locationIdx in visitedLocations) {
@@ -177,9 +190,38 @@ function drawRegionsMap(regionArray, volumeHash) {
     chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
     chart.draw(drawData, getOptions(regionArray));
     updateView(regionArray, volumeHash);
+    updateDropdowns(regionArray);
 
     google.visualization.events.addListener(chart, 'regionClick', function (r) {
-        console.log('regionClick: ' + r.region);
         toggleRegion(regionArray, r.region)
     });
 }
+
+function getShareUrl() {
+    const regionStr = regionArray.filter(region => region[1] === 1).map(region => region[0].v).join(',');
+    var url = location.protocol + '//' + location.host + '/share';
+    if (regionStr)
+            url += '?active=' + regionStr;
+    return url;
+}
+
+function getShareTitle() {
+    return document.title;
+}
+
+function copyButton() {
+    var copyText = getShareUrl();
+
+    // Copy the text inside the text field
+    navigator.clipboard.writeText(copyText);
+
+    var tooltip = document.getElementById("myTooltip");
+    tooltip.innerHTML = "Copied!";
+
+}
+
+function onMouseOutLinkShare() {
+    var tooltip = document.getElementById("myTooltip");
+    tooltip.innerHTML = "Copy to clipboard";
+}
+

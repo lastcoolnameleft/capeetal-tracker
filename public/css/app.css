@@ -19,7 +19,7 @@ ul.share-buttons{
   }
   
   ul.share-buttons img{
-    width: 32px;
+    width: 50px;
   }
 
   .tooltip {
@@ -82,6 +82,10 @@ header {
     background-image: url("/images/mosaictile.png");
     background-repeat: repeat-x;
     background-size: 250px;
+}
+
+.no-border-bottom {
+    border-bottom: none;
 }
 
 /* https://www.w3schools.com/howto/howto_js_dropdown.asp */
