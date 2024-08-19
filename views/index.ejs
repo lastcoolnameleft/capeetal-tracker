@@ -6,21 +6,7 @@
         <section id="main" class="wrapper">
             <div class="inner" style="padding-top: 40px;">
                 <script>
-                    function copyButton() {
-                        var copyText = document.URL;
-
-                        // Copy the text inside the text field
-                        navigator.clipboard.writeText(copyText);
-
-                        var tooltip = document.getElementById("myTooltip");
-                        tooltip.innerHTML = "Copied!";
-
-                    }
-
-                    function outFunc() {
-                        var tooltip = document.getElementById("myTooltip");
-                        tooltip.innerHTML = "Copy to clipboard";
-                    }
+                    is_share_page = <%= is_share_page %>;
 
                     function showStateCapitals() {
                         document.getElementById("myDropdown").classList.toggle("show");
@@ -39,12 +25,12 @@
                             }
                         }
                     }
+
                 </script>
                 <center>
-                    Welcome to the Ca-PEE-tal tracker where you track each US state capital you've urinated!
-                    <h2 id="amount"></h2>
+                    <h2>Welcome to the Ca-PEE-tal tracker where you track each US state capital you've urinated!</h2>
+                    <h3 style="color: #e0b336;" id="amount"></h3>
                     <div id="regions_div"></div>
-                    <br \>
                     <div class="dropdown">
                         <button onclick="showStateCapitals()" class="dropbtn">State Capitals <i class="arrow down"></i></button>
                         <div id="myDropdown" class="dropdown-content">
@@ -54,24 +40,25 @@
                         </div>
                     </div>
                     <br \>
-                    Share on:
+                    <br \>
+                    <h2 style="margin-bottom: 0px;">Click here to overshare!</h2>
                     <ul class="share-buttons" data-source="simplesharingbuttons.com">
-                        <li><a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcapeetaltracker.com%2F&quote="
+                        <li><a class="no-border-bottom" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcapeetaltracker.com%2F&quote="
                                 title="Share on Facebook" target="_blank"
-                                onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(document.URL) + '&quote=' + encodeURIComponent(document.URL)); return false;"><img
-                                    alt="Share on Facebook" src="/images/share/capeetal_fb.png" /></a></li>
-                        <li><a href="mailto:?subject=&body=:%20https%3A%2F%2Fcapeetaltracker.com%2F" target="_blank"
+                                onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(getShareUrl()) + '&quote=' + encodeURIComponent(getShareUrl())); return false;"><img
+                                    alt="Share on Facebook" src="/images/share/facebook.png" /></a></li>
+                        <li><a class="no-border-bottom" href="mailto:?subject=&body=:%20https%3A%2F%2Fcapeetaltracker.com%2F" target="_blank"
                                 title="Send email"
-                                onclick="window.open('mailto:?subject=' + encodeURIComponent(document.title) + '&body=' +  encodeURIComponent(document.URL)); return false;"><img
-                                    alt="Send email" src="images/share/capeetal_email.png" /></a></li>
-                        <li><a href="http://www.tumblr.com/share?v=3&u=https%3A%2F%2Fcapeetaltracker.com&quote=&s="
+                                onclick="window.open('mailto:?subject=' + encodeURIComponent(getShareTitle()) + '&body=' +  encodeURIComponent(getShareUrl())); return false;"><img
+                                    alt="Send email" src="images/share/email.png" /></a></li>
+                        <li><a class="no-border-bottom" href="http://www.tumblr.com/share?v=3&u=https%3A%2F%2Fcapeetaltracker.com&quote=&s="
                                 target="_blank" title="Post to Tumblr"
-                                onclick="window.open('http://www.tumblr.com/share?v=3&u=' + encodeURIComponent(document.URL) + '&quote=' +  encodeURIComponent(document.title)); return false;"><img
-                                    alt="Post to Tumblr" src="images/share/capeetal_tumblr.png" /></a></li>
+                                onclick="window.open('http://www.tumblr.com/share?v=3&u=' + encodeURIComponent(getShareUrl()) + '&quote=' +  encodeURIComponent(getShareTitle())); return false;"><img
+                                    alt="Post to Tumblr" src="images/share/tumblr.png" /></a></li>
                         <li>
                             <div class="tooltip">
-                                <img src="/images/share/capeetal_link.png" onclick="copyButton()"
-                                    onmouseout="outFunc()">
+                                <img src="/images/share/link.png" onclick="copyButton()"
+                                    onmouseout="onMouseOutLinkShare()">
                                 <span class="tooltiptext" id="myTooltip">Press to copy</span>
                             </div>
                         </li>

@@ -5,6 +5,38 @@ const stateHelper = require('./helpers/states');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  const renderObject = getMapRenderObject(req);
+  renderObject.is_share_page = false;
+  res.render('index', renderObject);
+});
+
+router.get('/share', function(req, res, next) {
+  const renderObject = getMapRenderObject(req);
+  renderObject.is_share_page = true;
+  res.render('index', renderObject);
+});
+
+router.get('/about', function(req, res, next) {
+  res.render('about');
+});
+
+router.get('/privacy', function(req, res, next) {
+  res.render('privacy');
+});
+
+router.get('/contact', function(req, res, next) {
+  res.render('contact');
+});
+
+router.get('/terms', function(req, res, next) {
+  res.render('terms');
+});
+
+router.get('/stats', function(req, res, next) {
+  res.render('stats');
+});
+
+function getMapRenderObject(req) {
   const region = 'us';
   var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   var activeRegions = req.query['active'];
@@ -28,7 +60,7 @@ router.get('/', function(req, res, next) {
   var activeRegionListStr = activeRegions.join(', ');
   var activeRegionCount = activeRegions.length;
   const regionHash = require(`../public/json/region/${region}.json`);
-  res.render('index', { 
+  return { 
     title: 'Ca-PEE-tal Tracker',
     fullUrl,
     imgUrl,
@@ -38,28 +70,7 @@ router.get('/', function(req, res, next) {
     stateListStr: activeRegionListStr,
     stateCount: activeRegionCount,
     capitalStr: pluralize('capital', activeRegionCount),
-  });
-});
-
-router.get('/about', function(req, res, next) {
-  res.render('about');
-});
-
-router.get('/privacy', function(req, res, next) {
-  res.render('privacy');
-});
-
-router.get('/contact', function(req, res, next) {
-  res.render('contact');
-});
-
-router.get('/terms', function(req, res, next) {
-  res.render('terms');
-});
-
-router.get('/stats', function(req, res, next) {
-  res.render('stats');
-});
-
+  };
+}
 
 module.exports = router;
