@@ -1,0 +1,22 @@
+on: workflow_dispatch
+
+env:
+  VM_DIR: /home/ghaction/capeetal-tracker
+
+jobs:
+  push-to-production:
+    name: Push to production
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands
+      uses: appleboy/ssh-action@v1.0.3
+      if: github.event_name != 'pull_request'
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          echo "Starting prod rollout"
+          cd ${{ env.VM_DIR }}
+          docker rollout -f docker-compose/docker-compose-prod.yaml --env-file production.env capeetal-tracker-prod
