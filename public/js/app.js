@@ -71,7 +71,7 @@ function updateView(regionArray, volumeHash) {
     const totalRegions = regionArray.length;
     $('#active_states').html(activeRegions);
     $('#total_states').html(totalRegions);
-    $('#amount').html(getAmount(activeRegions, totalRegions, volumeHash, activeRegions * 8));
+    $('#amount').html(getAmount(activeRegions, totalRegions, volumeHash, activeRegions * 8), is_share_page);
 
     // Update the URL
     const regionStr = regionArray.filter(region => region[1] === 1).map(region => region[0].v).join(',');
@@ -83,16 +83,16 @@ function updateView(regionArray, volumeHash) {
     sendLocationBeacon(regionStr);
 }
 
-function getAmount(activeRegions, totalRegions, volumeHash, amount) {
+function getAmount(activeRegions, totalRegions, volumeHash, amount, is_share_page) {
     var percent = Math.round(activeRegions / totalRegions * 100);
     var volKeys = Object.keys(volumeHash);
     var randKey = volKeys[volKeys.length * Math.random() << 0];
     var volume = Math.round(1000 * amount / volumeHash[randKey]) / 1000;
     if (is_share_page) {
-        return `I've peed in ${percent}% of states.<br>  That is ~${amount} fluid ounces or ${volume} ${pluralize(randKey, volume)}.` 
+        return `I've peed in ${percent}% of states.<br>  That is ~${amount} fluid ounces<br> or ${volume} ${pluralize(randKey, volume)}.`
             + `<br \><h2><a href='/'>Create your own map by clicking here!</a></h2>`;
     } else {
-        return `You've peed in ${percent}% of states.<br>  That is ~${amount} fluid ounces or ${volume} ${pluralize(randKey, volume)}.`;
+        return `You've peed in ${percent}% of states.<br>  That is ~${amount} fluid ounces<br> or ${volume} ${pluralize(randKey, volume)}.`;
     }
 }
 
@@ -121,6 +121,14 @@ function transformHashToGoogleArray(hash) {
     var regionArray = [];
     for (const key in hash) {
         regionArray.push([{ v: key, f: hash[key]}, 0, '']);
+    }
+    return regionArray;
+}
+
+function transformHashToGoogleArrayWithCountData(hash, countHash) {
+    var regionArray = [];
+    for (const key in hash) {
+        regionArray.push([{ v: key, f: hash[key]}, countHash[key], '']);
     }
     return regionArray;
 }

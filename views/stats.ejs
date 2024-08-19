@@ -10,9 +10,15 @@
     google.charts.setOnLoadCallback(initStatMap);
 
     function initStatMap() {
-        $.getJSON('/data/stats/us.json', function(regionHash) {
-            const statHash = regionHash['regionHash'];
-            const regionCount = regionHash['regionCount'];
+        const regionDataFetch = fetch('/json/region/us.json').then(res => res.json());
+        const statDataFetch = fetch('/data/stats/us.json').then(res => res.json());
+
+        Promise.all([statDataFetch, regionDataFetch]).then(([statData, regionData]) => {
+            console.log(statData);
+            console.log(regionData);
+            statHash = statData['regionHash'];
+            regionData_g = regionData;
+            const regionCount = statData['regionCount'];
             $('#countData').text(`${regionCount} Tinklers have marked their territory! (updated daily)`);
             var countData = [['State', 'Count']];
             for (var state in statHash) {
@@ -21,7 +27,17 @@
                     countData.push([state, count]);
                 }
             }
-            var data = google.visualization.arrayToDataTable(countData);
+
+            const data = new google.visualization.DataTable();
+            data.addColumn('string', 'State');
+            data.addColumn('number', 'Value');
+            var regionArray = [];
+            for (const key in regionData) {
+                regionArray.push([{ f: regionData[key], v: key}, statHash[key]]);
+            }
+            console.log(regionArray);
+            data.addRows(regionArray);
+
 
             var options = getBaseOptions();
             options.legend = {textStyle: {color: 'blue', fontSize: 12}}
