@@ -147,3 +147,9 @@ header {
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
 }
+
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}

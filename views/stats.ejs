@@ -13,7 +13,7 @@
         $.getJSON('/data/stats/us.json', function(regionHash) {
             const statHash = regionHash['regionHash'];
             const regionCount = regionHash['regionCount'];
-            $('#countData').text(`${regionCount} Tinklers have marked their territory in these states! (updated daily)`);
+            $('#countData').text(`${regionCount} Tinklers have marked their territory! (updated daily)`);
             var countData = [['State', 'Count']];
             for (var state in statHash) {
                 if (statHash.hasOwnProperty(state)) {
@@ -37,12 +37,10 @@
     <div id="wrapper">
         <!-- Main -->
         <section id="main" class="wrapper" >
-            <div class="inner" style="padding-top: 40px;">
-                <center>
-                    <h3><div id='countData'></div></h3>
+            <div class="inner center" style="padding-top: 40px;">
+                    <h2><div id='countData'></div></h2>
                     <div id="regions_div"></div>
                     <br \>
-                </center>
             </div>
         </section>
     </div>
