@@ -90,7 +90,7 @@ function getAmount(activeRegions, totalRegions, volumeHash, amount) {
     var volume = Math.round(1000 * amount / volumeHash[randKey]) / 1000;
     if (is_share_page) {
         return `I've peed in ${percent}% of states.<br>  That is ~${amount} fluid ounces or ${volume} ${pluralize(randKey, volume)}.` 
-            + `<br \><a href='/'>Create your own map by clicking here!</a>`;
+            + `<br \><h2><a href='/'>Create your own map by clicking here!</a></h2>`;
     } else {
         return `You've peed in ${percent}% of states.<br>  That is ~${amount} fluid ounces or ${volume} ${pluralize(randKey, volume)}.`;
     }
