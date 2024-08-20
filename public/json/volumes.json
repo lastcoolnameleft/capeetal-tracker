@@ -42,7 +42,7 @@
     "Keurig descaling solution bottle": 14,
     "large Stanley": 40,
     "large Yeti bottle": 64,
-    "martini glass": 0.554113,
+    "martini glass": 7,
     "perfume bottle": 3.4,
     "gasoline canister": 128,
     "paint bucket": 128,
@@ -57,5 +57,11 @@
     "snow globe": 3.4,
     "spitton": 5,
     "Super Soaker": 65,
-    "The Holy Grail": 10
+    "The Holy Grail": 10,
+    "small water pistol": 7,
+    "baby bottle": 9,
+    "skull of your vanquished enemy": 5.07,
+    "coconut": 11,
+    "water balloon": 3.5,
+    "handfull": 1.5
 }
