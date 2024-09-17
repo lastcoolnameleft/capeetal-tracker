@@ -1,3 +1,5 @@
+var path = require('path');
+var fs = require('fs');
 var express = require('express');
 var router = express.Router();
 var pluralize = require('pluralize')
@@ -59,7 +61,8 @@ function getMapRenderObject(req) {
 
   var activeRegionListStr = activeRegions.join(', ');
   var activeRegionCount = activeRegions.length;
-  const regionHash = require(`../public/json/region/${region}.json`);
+  const regionHashPath = path.resolve(__dirname, `../public/json/region/${region}.json`);
+  const regionHash = JSON.parse(fs.readFileSync(regionHashPath, 'utf-8'));
   return { 
     title: 'Ca-PEE-tal Tracker',
     fullUrl,

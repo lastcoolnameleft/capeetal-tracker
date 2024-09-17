@@ -8,7 +8,7 @@
                     is_share_page = <%= is_share_page %>;
 
                     function showStateCapitals() {
-                        document.getElementById("myDropdown").classList.toggle("show");
+                        document.getElementById("singleSelectionDropdown").classList.toggle("show");
                     }
 
                     // Close the dropdown menu if the user clicks outside of it
@@ -45,7 +45,7 @@
                     <div id="regions_div"></div>
                     <div class="dropdown">
                         <button onclick="showStateCapitals()" class="dropbtn">State Capitals <i class="arrow down"></i></button>
-                        <div id="myDropdown" class="dropdown-content">
+                        <div id="singleSelectionDropdown" class="dropdown-content">
                             <% for (const [code, name] of Object.entries(regionHash)) { %>
                                 <a class="dropdown-item" id="dropdown-item-<%= code.toLowerCase() %>" onclick="toggleRegion(regionArray, '<%= code %>');"><%= name %></a>
                             <% } %>
