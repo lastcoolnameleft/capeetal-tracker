@@ -6,6 +6,7 @@
     "start": "SQLITE_DB_PATH=${PWD}/data/db/ MAP_CACHE_PATH=${PWD}/data/map/ STATS_PATH=${PWD}/data/stats/ node ./bin/www"
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
     "bcrypt": "^6.0.0",
     "canvas": "^2.11.2",
     "connect-sqlite3": "^0.9.16",

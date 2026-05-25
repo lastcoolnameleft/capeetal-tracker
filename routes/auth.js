@@ -3,8 +3,10 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const validator = require('validator');
 const userDb = require('../lib/db-users');
+const { sendPasswordResetEmail } = require('../lib/email');
 
 const router = express.Router();
 const SALT_ROUNDS = 10;
@@ -169,14 +171,12 @@ router.post('/forgot', (req, res, next) => {
           return res.redirect('/auth/forgot?success=1');
         }
         // Generate token (1 hour expiry)
-        const crypto = require('crypto');
         const token = crypto.randomBytes(32).toString('hex');
         const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
         await userDb.createResetToken(user.id, token, expiresAt);
 
-        // In production, this would send an email. For now, log the link.
         const resetUrl = `${req.protocol}://${req.get('host')}/auth/reset?token=${token}`;
-        console.log(`Password reset link for ${email}: ${resetUrl}`);
+        await sendPasswordResetEmail(user.email, resetUrl);
 
         return res.redirect('/auth/forgot?success=1');
       } catch (err) {
