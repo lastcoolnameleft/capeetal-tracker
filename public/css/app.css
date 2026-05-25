@@ -271,18 +271,20 @@ header {
   transition: all 0.2s ease;
   font-family: 'Nunito', sans-serif;
   font-size: 0.8rem;
-  color: #333;
+  color: #333 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 .state-chip:hover {
   border-color: var(--color-primary);
   background: var(--color-highlight);
+  color: #333 !important;
 }
 
 .state-chip.active {
   background: var(--color-primary);
   border-color: var(--color-primary-dark);
-  color: white;
+  color: #fff !important;
 }
 
 .state-chip .chip-code {
