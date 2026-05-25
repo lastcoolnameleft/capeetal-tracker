@@ -154,7 +154,7 @@ function getDOMObj(stateStr) {
       <script type="text/javascript">
         google.charts.load('current', {
           'packages':['geochart'],
-          'mapsApiKey': 'AIzaSyCARIrIRh4GT-7tD7dVTmB2_nK3DzvNMuk'
+          'mapsApiKey': 'AIzaSyAZCTklcc5OblymgTasSLOalcq3cbENcIw'
         });
         google.charts.setOnLoadCallback(drawRegionsMap);
   

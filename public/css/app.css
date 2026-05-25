@@ -71,8 +71,12 @@ ul.share-buttons{
 } 
 
 body { 
-    font-family: 'MyFont', sans-serif; 
+    font-family: 'Nunito', sans-serif; 
     text-align: center; 
+}
+
+h1, h2, h3, h4, h5, h6, .dropbtn, .title {
+    font-family: 'MyFont', 'Nunito', sans-serif;
 }
 
 header {

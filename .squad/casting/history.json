@@ -1,0 +1,23 @@
+{
+  "assignment_cast_snapshots": {
+    "repl-cast-2026-05-21T21:46:54.227Z": {
+      "created_at": "2026-05-21T21:46:54.227Z",
+      "agents": [
+        "knoxville",
+        "steve-o",
+        "pontius",
+        "wee-man",
+        "ehren",
+        "scribe",
+        "ralph"
+      ],
+      "universe": "Jackass"
+    }
+  },
+  "universe_usage_history": [
+    {
+      "universe": "Jackass",
+      "used_at": "2026-05-21T21:46:54.227Z"
+    }
+  ]
+}
