@@ -1,0 +1,27 @@
+<%- include ('includes/header.ejs', {}) %>
+
+<div id="wrapper">
+    <section id="main" class="wrapper">
+        <div class="inner center">
+            <h2>Reset Password</h2>
+
+            <% if (error) { %>
+                <div class="auth-error" role="alert"><%= error %></div>
+            <% } %>
+
+            <form action="/auth/reset" method="POST" class="auth-form">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" name="token" value="<%= token %>">
+                <div class="auth-field">
+                    <label for="password">New Password</label>
+                    <input type="password" id="password" name="password" required minlength="8" autocomplete="new-password">
+                </div>
+                <button type="submit" class="auth-btn auth-btn-primary">Reset Password</button>
+            </form>
+
+            <p class="auth-link"><a href="/auth/login">Back to login</a></p>
+        </div>
+    </section>
+</div>
+
+<%- include ('includes/footer.ejs') %>

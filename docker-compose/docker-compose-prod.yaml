@@ -17,6 +17,10 @@ services:
       - SQLITE_DB_PATH=/code/db/
       - MAP_CACHE_PATH=/code/map/
       - STATS_PATH=/code/stats/
+      - SESSION_SECRET=${SESSION_SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - NODE_ENV=production
     deploy:
       restart_policy:
         condition: on-failure

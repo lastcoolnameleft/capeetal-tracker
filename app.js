@@ -6,6 +6,8 @@ var logger = require('morgan');
 var session = require('express-session');
 var SQLiteStore = require('connect-sqlite3')(session);
 var passport = require('passport');
+var { csrfSync } = require('csrf-sync');
+var rateLimit = require('express-rate-limit');
 var userDb = require('./lib/db-users');
 
 var indexRouter = require('./routes/index');
@@ -15,8 +17,15 @@ var authRouter = require('./routes/auth');
 
 var app = express();
 
+var isProduction = process.env.NODE_ENV === 'production';
+
 // Initialize user database
 userDb.initDb().catch(err => console.error('Failed to init users DB:', err));
+
+// Trust proxy in production (behind Traefik)
+if (isProduction) {
+  app.set('trust proxy', 1);
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -39,6 +48,8 @@ app.use(session({
   cookie: {
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     httpOnly: true,
+    secure: isProduction,
+    sameSite: 'lax',
   },
 }));
 
@@ -46,9 +57,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Make user available to all views
+// CSRF protection
+var { csrfSynchronisedProtection, generateToken } = csrfSync({
+  getTokenFromRequest: (req) => req.body._csrf || req.headers['x-csrf-token'],
+});
+
+// Make user and CSRF token available to all views
 app.use((req, res, next) => {
   res.locals.user = req.user || null;
+  res.locals.csrfToken = generateToken(req);
   next();
 });
 
@@ -75,9 +92,23 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  console.log(err.stack);
+  if (isProduction) {
+    console.error('Error:', err.message);
+  } else {
+    console.error(err.stack);
+  }
   res.status(err.status || 500);
   res.render('error');
+});
+
+// Export rate limiter and CSRF for use in routes
+app.locals.csrfProtection = csrfSynchronisedProtection;
+app.locals.authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // 10 attempts per window
+  message: 'Too many attempts, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 
 module.exports = app;

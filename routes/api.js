@@ -11,23 +11,25 @@ function isAuthenticated(req, res, next) {
 }
 
 // Get saved progress for logged-in user
-router.get('/progress', isAuthenticated, async function(req, res, next) {
+router.get('/progress', isAuthenticated, async function(req, res) {
   try {
     const locations = await userDb.getProgress(req.user.id);
     res.json({ locations: locations || '' });
   } catch (err) {
-    next(err);
+    console.error('Error loading progress:', err.message);
+    res.status(500).json({ error: 'Failed to load progress' });
   }
 });
 
 // Save progress for logged-in user
-router.post('/progress', isAuthenticated, async function(req, res, next) {
+router.post('/progress', isAuthenticated, async function(req, res) {
   try {
     const locations = req.body.locations || '';
     await userDb.saveProgress(req.user.id, locations);
     res.json({ ok: true });
   } catch (err) {
-    next(err);
+    console.error('Error saving progress:', err.message);
+    res.status(500).json({ error: 'Failed to save progress' });
   }
 });
 

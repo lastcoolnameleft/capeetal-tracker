@@ -3,6 +3,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const bcrypt = require('bcrypt');
+const validator = require('validator');
 const userDb = require('../lib/db-users');
 
 const router = express.Router();
@@ -75,42 +76,65 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
-    if (err) return next(err);
-    if (!user) return res.redirect('/auth/login?error=' + encodeURIComponent(info.message));
-    req.logIn(user, (err) => {
-      if (err) return next(err);
-      return res.redirect('/');
+  const { csrfProtection, authLimiter } = req.app.locals;
+  authLimiter(req, res, () => {
+    csrfProtection(req, res, () => {
+      // Sanitize input
+      const email = validator.trim(req.body.email || '').toLowerCase();
+      if (!validator.isEmail(email)) {
+        return res.redirect('/auth/login?error=' + encodeURIComponent('Please enter a valid email.'));
+      }
+      req.body.email = email;
+
+      passport.authenticate('local', (err, user, info) => {
+        if (err) return next(err);
+        if (!user) return res.redirect('/auth/login?error=' + encodeURIComponent(info.message));
+        req.logIn(user, (err) => {
+          if (err) return next(err);
+          return res.redirect('/');
+        });
+      })(req, res, next);
     });
-  })(req, res, next);
+  });
 });
 
-router.post('/register', async (req, res, next) => {
-  try {
-    const { email, password, display_name } = req.body;
-    if (!email || !password) {
-      return res.redirect('/auth/register?error=' + encodeURIComponent('Email and password are required.'));
-    }
-    if (password.length < 6) {
-      return res.redirect('/auth/register?error=' + encodeURIComponent('Password must be at least 6 characters.'));
-    }
-    const existing = await userDb.findUserByEmail(email.toLowerCase());
-    if (existing) {
-      return res.redirect('/auth/register?error=' + encodeURIComponent('An account with that email already exists.'));
-    }
-    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
-    const user = await userDb.createUser({
-      email: email.toLowerCase(),
-      passwordHash,
-      displayName: display_name || email.split('@')[0],
+router.post('/register', (req, res, next) => {
+  const { csrfProtection, authLimiter } = req.app.locals;
+  authLimiter(req, res, () => {
+    csrfProtection(req, res, async () => {
+      try {
+        const email = validator.trim(req.body.email || '').toLowerCase();
+        const password = req.body.password || '';
+        const displayName = validator.trim(validator.escape(req.body.display_name || ''));
+
+        if (!validator.isEmail(email)) {
+          return res.redirect('/auth/register?error=' + encodeURIComponent('Please enter a valid email address.'));
+        }
+        if (password.length < 8) {
+          return res.redirect('/auth/register?error=' + encodeURIComponent('Password must be at least 8 characters.'));
+        }
+        if (displayName.length > 50) {
+          return res.redirect('/auth/register?error=' + encodeURIComponent('Display name must be 50 characters or less.'));
+        }
+        const existing = await userDb.findUserByEmail(email);
+        if (existing) {
+          return res.redirect('/auth/register?error=' + encodeURIComponent('An account with that email already exists.'));
+        }
+        const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+        const user = await userDb.createUser({
+          email,
+          passwordHash,
+          displayName: displayName || email.split('@')[0],
+        });
+        req.logIn(user, (err) => {
+          if (err) return next(err);
+          return res.redirect('/');
+        });
+      } catch (err) {
+        next(err);
+      }
     });
-    req.logIn(user, (err) => {
-      if (err) return next(err);
-      return res.redirect('/');
-    });
-  } catch (err) {
-    next(err);
-  }
+  });
 });
 
 // Google OAuth routes
@@ -122,6 +146,77 @@ router.get('/google/callback',
     res.redirect('/');
   }
 );
+
+// Forgot password
+router.get('/forgot', (req, res) => {
+  const error = req.query.error || null;
+  const success = req.query.success || null;
+  res.render('forgot', { error, success, user: req.user || null });
+});
+
+router.post('/forgot', (req, res, next) => {
+  const { csrfProtection, authLimiter } = req.app.locals;
+  authLimiter(req, res, () => {
+    csrfProtection(req, res, async () => {
+      try {
+        const email = validator.trim(req.body.email || '').toLowerCase();
+        if (!validator.isEmail(email)) {
+          return res.redirect('/auth/forgot?error=' + encodeURIComponent('Please enter a valid email.'));
+        }
+        const user = await userDb.findUserByEmail(email);
+        // Always show success to prevent email enumeration
+        if (!user) {
+          return res.redirect('/auth/forgot?success=1');
+        }
+        // Generate token (1 hour expiry)
+        const crypto = require('crypto');
+        const token = crypto.randomBytes(32).toString('hex');
+        const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+        await userDb.createResetToken(user.id, token, expiresAt);
+
+        // In production, this would send an email. For now, log the link.
+        const resetUrl = `${req.protocol}://${req.get('host')}/auth/reset?token=${token}`;
+        console.log(`Password reset link for ${email}: ${resetUrl}`);
+
+        return res.redirect('/auth/forgot?success=1');
+      } catch (err) {
+        next(err);
+      }
+    });
+  });
+});
+
+// Reset password
+router.get('/reset', (req, res) => {
+  const token = req.query.token || '';
+  const error = req.query.error || null;
+  res.render('reset', { token, error, user: req.user || null });
+});
+
+router.post('/reset', (req, res, next) => {
+  const { csrfProtection, authLimiter } = req.app.locals;
+  authLimiter(req, res, () => {
+    csrfProtection(req, res, async () => {
+      try {
+        const token = req.body.token || '';
+        const password = req.body.password || '';
+        if (password.length < 8) {
+          return res.redirect(`/auth/reset?token=${token}&error=` + encodeURIComponent('Password must be at least 8 characters.'));
+        }
+        const resetRecord = await userDb.findValidResetToken(token);
+        if (!resetRecord) {
+          return res.redirect('/auth/forgot?error=' + encodeURIComponent('Invalid or expired reset link. Please try again.'));
+        }
+        const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+        await userDb.updatePassword(resetRecord.user_id, passwordHash);
+        await userDb.markResetTokenUsed(token);
+        return res.redirect('/auth/login?error=' + encodeURIComponent('Password updated! Please log in.'));
+      } catch (err) {
+        next(err);
+      }
+    });
+  });
+});
 
 router.get('/logout', (req, res, next) => {
   req.logout((err) => {

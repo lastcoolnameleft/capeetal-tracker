@@ -198,9 +198,16 @@ function initMap() {
         // Load from server if logged in, otherwise use localStorage/URL
         loadServerProgress(regionArray).then(function(updatedArray) {
             regionArray = updatedArray;
-            // If server had no data, fall back to localStorage/URL
-            if (countActiveLocations(regionArray) === 0) {
+            // Only fall back to localStorage/URL if NOT logged in or server had no data
+            if (typeof is_logged_in === 'undefined' || !is_logged_in) {
                 regionArray = addVisitedLocations(regionArray);
+            } else if (countActiveLocations(regionArray) === 0) {
+                // Logged in but no server data — import from localStorage and save to server
+                regionArray = addVisitedLocations(regionArray);
+                if (countActiveLocations(regionArray) > 0) {
+                    var regionStr = regionArray.filter(r => r[1] === 1).map(r => r[0].v).join(',');
+                    saveServerProgress(regionStr);
+                }
             }
             drawRegionsMap(regionArray, volumeHash);
         });

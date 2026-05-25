@@ -98,6 +98,15 @@
   font-size: 0.9rem;
 }
 
+.auth-success {
+  background: #d4edda;
+  color: #155724 !important;
+  padding: 10px 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+
 .auth-link {
   margin-top: 20px;
   font-size: 0.9rem;
