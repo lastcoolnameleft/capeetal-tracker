@@ -254,16 +254,17 @@ header {
 /* State chip grid */
 .state-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  grid-template-columns: repeat(5, 1fr);
   gap: 6px;
   padding: 16px 0;
 }
 
 .state-chip {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
+  justify-content: center;
+  padding: 8px 4px;
   border: 2px solid #d0d0d0;
   border-radius: 6px;
   background: #ffffff;
@@ -273,6 +274,7 @@ header {
   font-size: 0.8rem;
   color: #333 !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  text-align: center;
 }
 
 .state-chip:hover {
@@ -289,15 +291,13 @@ header {
 
 .state-chip .chip-code {
   font-weight: 700;
-  min-width: 20px;
+  font-size: 0.9rem;
 }
 
 .state-chip .chip-name {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   opacity: 0.85;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.2;
 }
 
 /* Accessibility: focus styles */
@@ -339,7 +339,7 @@ a:focus-visible {
   }
 
   .state-grid {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
   }
 
   #regions_div {
@@ -359,16 +359,11 @@ a:focus-visible {
   }
 
   .state-grid {
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 4px;
   }
 
   .state-chip {
-    padding: 5px 6px;
-    font-size: 0.75rem;
-  }
-
-  .state-chip .chip-name {
-    display: none;
+    padding: 5px 4px;
   }
 }
