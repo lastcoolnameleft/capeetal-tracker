@@ -77,9 +77,11 @@ function updateView(regionArray, volumeHash) {
     var progressCount = document.getElementById('progress-count');
     var progressTotal = document.getElementById('progress-total');
     var progressFill = document.getElementById('progress-fill');
+    var progressContainer = document.getElementById('progress-container');
     if (progressCount) progressCount.textContent = activeRegions;
     if (progressTotal) progressTotal.textContent = totalRegions;
     if (progressFill) progressFill.style.width = Math.round((activeRegions / totalRegions) * 100) + '%';
+    if (progressContainer) progressContainer.setAttribute('aria-valuenow', activeRegions);
 
     // Update the URL
     const regionStr = regionArray.filter(region => region[1] === 1).map(region => region[0].v).join(',');
@@ -186,8 +188,10 @@ function updateDropdowns(regionArray) {
         if (!chip) continue;
         if (regionArray[i][1] == 1) {
             chip.classList.add('active');
+            chip.setAttribute('aria-pressed', 'true');
         } else {
             chip.classList.remove('active');
+            chip.setAttribute('aria-pressed', 'false');
         }
     }
 }

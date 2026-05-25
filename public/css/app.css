@@ -299,6 +299,33 @@ header {
   text-overflow: ellipsis;
 }
 
+/* Accessibility: focus styles */
+.state-chip:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+button:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+a:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+.copy-link-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.copy-link-btn img {
+  width: 50px;
+}
+
 /* Mobile responsiveness */
 @media screen and (max-width: 768px) {
   .center {
