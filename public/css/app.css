@@ -166,5 +166,46 @@ header {
 
 .center {
   margin: auto;
-  width: 50%;
+  width: 90%;
+  max-width: 800px;
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 768px) {
+  .center {
+    width: 95%;
+    padding: 10px;
+  }
+
+  ul.share-buttons img {
+    width: 40px;
+  }
+
+  .dropdown-content {
+    min-width: 200px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  #regions_div {
+    width: 100% !important;
+    overflow-x: auto;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .center {
+    width: 100%;
+    padding: 5px;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  .dropbtn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+  }
 }
