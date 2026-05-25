@@ -2,6 +2,34 @@ var express = require('express');
 var router = express.Router();
 const sqlite3 = require('sqlite3');
 const fs = require("fs");
+const userDb = require('../lib/db-users');
+
+// Middleware to check if user is authenticated
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) return next();
+  return res.status(401).json({ error: 'Not authenticated' });
+}
+
+// Get saved progress for logged-in user
+router.get('/progress', isAuthenticated, async function(req, res, next) {
+  try {
+    const locations = await userDb.getProgress(req.user.id);
+    res.json({ locations: locations || '' });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Save progress for logged-in user
+router.post('/progress', isAuthenticated, async function(req, res, next) {
+  try {
+    const locations = req.body.locations || '';
+    await userDb.saveProgress(req.user.id, locations);
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
+});
 
 /* GET users listing. */
 router.post('/save', function(req, res, next) {

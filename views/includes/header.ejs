@@ -66,6 +66,11 @@
 				<li><a href="/" <% if (locals.isIndex) { %>class="active"<% } %>>Home</a></li>
 				<li><a href="/stats" <% if (locals.isStats) { %>class="active"<% } %>>Stats</a></li>
 				<li><a href="/about" <% if (locals.isAbout) { %>class="active"<% } %>>About</a></li>
+				<% if (locals.user) { %>
+				<li><a href="/auth/logout">Logout (<%= user.display_name || user.email %>)</a></li>
+				<% } else { %>
+				<li><a href="/auth/login" <% if (locals.isLogin || locals.isRegister) { %>class="active"<% } %>>Login</a></li>
+				<% } %>
 			</ul>
 		</nav>
 	</header>

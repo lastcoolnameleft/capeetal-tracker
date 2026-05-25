@@ -127,6 +127,42 @@ function addVisitedLocations(regionArray) {
     return regionArray;
 }
 
+// Load progress from server for logged-in users
+function loadServerProgress(regionArray) {
+    if (typeof is_logged_in === 'undefined' || !is_logged_in) return Promise.resolve(regionArray);
+    return fetch('/api/progress')
+        .then(res => res.json())
+        .then(data => {
+            if (data.locations) {
+                // Reset array first
+                for (var i = 0; i < regionArray.length; i++) {
+                    regionArray[i][1] = 0;
+                }
+                const locations = data.locations.split(',');
+                for (var idx in locations) {
+                    regionArray = updateRegionArray(regionArray, locations[idx]);
+                }
+                // Sync to localStorage too
+                localStorage.setItem('activeRegionsStr', data.locations);
+            }
+            return regionArray;
+        })
+        .catch(err => {
+            console.log('Failed to load server progress:', err);
+            return regionArray;
+        });
+}
+
+// Save progress to server for logged-in users
+function saveServerProgress(regionStr) {
+    if (typeof is_logged_in === 'undefined' || !is_logged_in) return;
+    fetch('/api/progress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ locations: regionStr }),
+    }).catch(err => console.log('Failed to save progress:', err));
+}
+
 function transformHashToGoogleArray(hash) {
     var regionArray = [];
     for (const key in hash) {
@@ -158,7 +194,16 @@ function initMap() {
             }
         }
         regionArray = transformHashToGoogleArray(regionHashResult);
-        drawRegionsMap(regionArray, volumeHash);
+
+        // Load from server if logged in, otherwise use localStorage/URL
+        loadServerProgress(regionArray).then(function(updatedArray) {
+            regionArray = updatedArray;
+            // If server had no data, fall back to localStorage/URL
+            if (countActiveLocations(regionArray) === 0) {
+                regionArray = addVisitedLocations(regionArray);
+            }
+            drawRegionsMap(regionArray, volumeHash);
+        });
     });
 }
 
@@ -179,6 +224,9 @@ function sendLocationBeacon(locations) {
             locations,
         },
       });
+
+    // Also save to user account if logged in
+    saveServerProgress(locations);
 }
 
 function updateDropdowns(regionArray) {

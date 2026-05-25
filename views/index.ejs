@@ -6,6 +6,7 @@
             <div class="inner center">
                 <script>
                     is_share_page = <%= is_share_page %>;
+                    is_logged_in = <%= locals.user ? 'true' : 'false' %>;
 
                     function share() {
                         const activeRegions = countActiveLocations(regionArray);
