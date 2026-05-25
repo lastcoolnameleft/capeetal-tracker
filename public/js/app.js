@@ -199,6 +199,13 @@ function toggleRegion(regionArray, region) {
     chart.draw(drawData, getOptions(regionArray));
     updateView(regionArray, volumeHash);
     updateDropdowns(regionArray);
+
+    // Flash the map container to provide visual feedback
+    var mapDiv = document.getElementById('regions_div');
+    if (mapDiv) {
+        mapDiv.classList.add('map-flash');
+        setTimeout(function() { mapDiv.classList.remove('map-flash'); }, 400);
+    }
 }
 
 function drawRegionsMap(regionArray, volumeHash) {
