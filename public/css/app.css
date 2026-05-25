@@ -32,7 +32,7 @@
 /* Progress bar */
 .progress-container {
   margin: 16px auto;
-  max-width: 500px;
+  width: 100%;
 }
 
 .progress-text {
