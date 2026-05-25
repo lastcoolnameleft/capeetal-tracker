@@ -37,9 +37,11 @@
                     <div id="regions_div" role="img" aria-label="Interactive map of US states showing visited capitals"></div>
                     <div class="state-grid" id="stateGrid" role="group" aria-label="Select state capitals you have visited">
                         <% for (const [code, name] of Object.entries(regionHash)) { %>
-                            <button class="state-chip" id="chip-<%= code.toLowerCase() %>" onclick="toggleRegion(regionArray, '<%= code %>');" aria-pressed="false" aria-label="<%= name %>, <%= code %>">
-                                <span class="chip-code"><%= code %></span>
-                                <span class="chip-name"><%= name %></span>
+                            <% const stateAbbr = code.replace('US-', ''); %>
+                            <% const cityName = name.split(',')[0]; %>
+                            <button class="state-chip" id="chip-<%= code.toLowerCase() %>" onclick="toggleRegion(regionArray, '<%= code %>');" aria-pressed="false" aria-label="<%= name %>">
+                                <span class="chip-code"><%= stateAbbr %></span>
+                                <span class="chip-name"><%= cityName %></span>
                             </button>
                         <% } %>
                     </div>
