@@ -23,16 +23,16 @@
 
                 </script>
                     <h2>Welcome to the Ca-PEE-tal Tracker where you track each US state capital you've urinated!</h2>
+                    <h3 style="color: var(--color-primary);" id="amount" aria-live="polite"></h3>
+                    <div id="loading-spinner" class="spinner-container" role="status" aria-label="Loading map">
+                        <div class="spinner" aria-hidden="true"></div>
+                        <p>Loading map...</p>
+                    </div>
                     <div class="progress-container" id="progress-container" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="50" aria-label="Capital cities visited progress">
                         <div class="progress-text"><span id="progress-count">0</span> / <span id="progress-total">50</span> capitals visited</div>
                         <div class="progress-bar">
                             <div class="progress-fill" id="progress-fill"></div>
                         </div>
-                    </div>
-                    <h3 style="color: var(--color-primary);" id="amount" aria-live="polite"></h3>
-                    <div id="loading-spinner" class="spinner-container" role="status" aria-label="Loading map">
-                        <div class="spinner" aria-hidden="true"></div>
-                        <p>Loading map...</p>
                     </div>
                     <div id="regions_div" role="img" aria-label="Interactive map of US states showing visited capitals"></div>
                     <div class="state-grid" id="stateGrid" role="group" aria-label="Select state capitals you have visited">
