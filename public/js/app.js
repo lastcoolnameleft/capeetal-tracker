@@ -174,10 +174,12 @@ function sendLocationBeacon(locations) {
 function updateDropdowns(regionArray) {
     for (var i = 0; i < regionArray.length; i++) {
         const key = regionArray[i][0].v.toLowerCase();
+        var chip = document.getElementById("chip-" + key);
+        if (!chip) continue;
         if (regionArray[i][1] == 1) {
-            document.getElementById("dropdown-item-" + key).classList.add('dropdown-content-selected');
+            chip.classList.add('active');
         } else {
-            document.getElementById("dropdown-item-" + key).classList.remove('dropdown-content-selected');
+            chip.classList.remove('active');
         }
     }
 }

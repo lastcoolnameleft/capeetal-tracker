@@ -201,6 +201,54 @@ header {
   max-width: 800px;
 }
 
+/* State chip grid */
+.state-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  padding: 16px 0;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.state-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: var(--color-bg-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.85rem;
+}
+
+.state-chip:hover {
+  border-color: var(--color-primary);
+  background: var(--color-highlight);
+}
+
+.state-chip.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary-dark);
+  color: white;
+}
+
+.state-chip .chip-code {
+  font-weight: 700;
+  min-width: 24px;
+}
+
+.state-chip .chip-name {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* Mobile responsiveness */
 @media screen and (max-width: 768px) {
   .center {
@@ -212,10 +260,9 @@ header {
     width: 40px;
   }
 
-  .dropdown-content {
-    min-width: 200px;
-    max-height: 60vh;
-    overflow-y: auto;
+  .state-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    max-height: 300px;
   }
 
   #regions_div {
@@ -234,9 +281,13 @@ header {
     font-size: 1.3rem;
   }
 
-  .dropbtn {
-    width: 100%;
-    padding: 12px;
-    font-size: 1rem;
+  .state-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 6px;
+  }
+
+  .state-chip {
+    padding: 6px 8px;
+    font-size: 0.8rem;
   }
 }
