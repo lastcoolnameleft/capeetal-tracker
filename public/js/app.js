@@ -200,6 +200,10 @@ function drawRegionsMap(regionArray, volumeHash) {
     updateView(regionArray, volumeHash);
     updateDropdowns(regionArray);
 
+    // Hide loading spinner once map is drawn
+    var spinner = document.getElementById('loading-spinner');
+    if (spinner) spinner.classList.add('hidden');
+
     google.visualization.events.addListener(chart, 'regionClick', function (r) {
         toggleRegion(regionArray, r.region)
     });
