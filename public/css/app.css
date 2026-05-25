@@ -61,6 +61,21 @@ ul.share-buttons{
   }
 
 
+/* Color palette */
+:root {
+    --color-primary: #e0b336;
+    --color-primary-dark: #c99a1f;
+    --color-secondary: #3b7dd8;
+    --color-secondary-light: #5a9bf0;
+    --color-accent: #2ec4b6;
+    --color-bg-dark: #1a1a2e;
+    --color-bg-light: #f8f9fa;
+    --color-text: #2d2d2d;
+    --color-text-light: #6c757d;
+    --color-success: #28a745;
+    --color-highlight: #fff3cd;
+}
+
 @font-face { 
     font-family: 'MyFont'; 
     src: 
@@ -92,7 +107,7 @@ header {
 /* https://www.w3schools.com/howto/howto_js_dropdown.asp */
 /* Dropdown Button */
 .dropbtn {
-  background-color: #e0b336;
+  background-color: var(--color-primary);
   color: white;
   border: none;
   cursor: pointer;
@@ -100,7 +115,7 @@ header {
 
 /* Dropdown button on hover & focus */
 .dropbtn:hover, .dropbtn:focus {
-  background-color: #e0b336;
+  background-color: var(--color-primary-dark);
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -120,7 +135,7 @@ header {
 }
 
 .dropdown-content-selected {
-  background-color: #e0b336;
+  background-color: var(--color-primary);
 }
 
 .dropdown-content a {
