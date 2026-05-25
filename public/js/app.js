@@ -73,6 +73,14 @@ function updateView(regionArray, volumeHash) {
     $('#total_states').html(totalRegions);
     $('#amount').html(getAmount(activeRegions, totalRegions, volumeHash, activeRegions * 8), is_share_page);
 
+    // Update progress bar
+    var progressCount = document.getElementById('progress-count');
+    var progressTotal = document.getElementById('progress-total');
+    var progressFill = document.getElementById('progress-fill');
+    if (progressCount) progressCount.textContent = activeRegions;
+    if (progressTotal) progressTotal.textContent = totalRegions;
+    if (progressFill) progressFill.style.width = Math.round((activeRegions / totalRegions) * 100) + '%';
+
     // Update the URL
     const regionStr = regionArray.filter(region => region[1] === 1).map(region => region[0].v).join(',');
     localStorage.setItem("activeRegionsStr", regionStr);
