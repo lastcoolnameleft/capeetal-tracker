@@ -23,7 +23,7 @@ def test_health_endpoint():
 
 def test_share_page_loads():
     """Share page returns 200."""
-    r = requests.get(f"{BASE_URL}/share/CA", timeout=10)
+    r = requests.get(f"{BASE_URL}/share?s=CA", timeout=10)
     assert r.status_code == 200
 
 
