@@ -2,6 +2,10 @@ name: Production Push
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Staging Smoke Tests"]
+    types: [completed]
+    branches: [main]
 
 env:
   REGISTRY: ghcr.io
@@ -15,6 +19,7 @@ jobs:
   promote-to-production:
     name: Promote to production
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Log in to GHCR
         uses: docker/login-action@v3

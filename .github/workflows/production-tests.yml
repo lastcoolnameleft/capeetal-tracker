@@ -1,0 +1,84 @@
+name: Production Smoke Tests
+
+on:
+  workflow_run:
+    workflows: ["Production Push"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Production URL to test against"
+        default: ""
+      expected_sha:
+        description: "Optional SHA to wait for before testing"
+        default: ""
+
+jobs:
+  wait-for-deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    env:
+      PROD_BASE_URL: ${{ inputs.base_url || secrets.PROD_BASE_URL }}
+    outputs:
+      sha_match: ${{ steps.poll.outputs.sha_match }}
+    steps:
+      - name: Wait for promoted version to be live
+        id: poll
+        run: |
+          if [[ -z "${{ env.PROD_BASE_URL }}" ]]; then
+            echo "::error::PROD_BASE_URL is not configured"
+            exit 1
+          fi
+          EXPECTED_SHA="${{ inputs.expected_sha || github.event.workflow_run.head_sha }}"
+          if [[ -z "$EXPECTED_SHA" ]]; then
+            echo "sha_match=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          EXPECTED_SHORT="${EXPECTED_SHA:0:7}"
+          HEALTH_URL="${{ env.PROD_BASE_URL }}/api/health"
+          MAX_ATTEMPTS=30
+          SLEEP_SECONDS=10
+          echo "Waiting for SHA ${EXPECTED_SHORT} at ${HEALTH_URL}..."
+          for i in $(seq 1 $MAX_ATTEMPTS); do
+            RESPONSE=$(curl -sf "$HEALTH_URL" 2>/dev/null || echo '{}')
+            LIVE_SHA=$(echo "$RESPONSE" | jq -r '.sha // "unknown"')
+            echo "  Attempt $i/$MAX_ATTEMPTS — live SHA: $LIVE_SHA"
+            if [[ "$LIVE_SHA" == "$EXPECTED_SHA" ]] || [[ "$LIVE_SHA" == "$EXPECTED_SHORT"* ]]; then
+              echo "sha_match=true" >> "$GITHUB_OUTPUT"
+              echo "Deploy confirmed!"
+              exit 0
+            fi
+            sleep $SLEEP_SECONDS
+          done
+          echo "sha_match=false" >> "$GITHUB_OUTPUT"
+          echo "::warning::Timed out waiting for deploy"
+          exit 1
+
+  smoke-tests:
+    needs: wait-for-deploy
+    runs-on: ubuntu-latest
+    env:
+      PROD_BASE_URL: ${{ inputs.base_url || secrets.PROD_BASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependencies
+        run: pip install requests pytest
+      - name: Run production smoke tests
+        run: pytest tests/production/ -v --tb=short
+      - name: Create failure issue
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const sha = '${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}'.substring(0, 7);
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Production smoke test failed — ${sha}`,
+              body: `Production smoke tests failed for ${process.env.PROD_BASE_URL || 'the configured production environment'}.`,
+              labels: ['bug']
+            })

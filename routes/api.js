@@ -4,6 +4,15 @@ const sqlite3 = require('sqlite3');
 const fs = require("fs");
 const userDb = require('../lib/db-users');
 
+// Health check endpoint for deployment verification
+router.get('/health', function(req, res) {
+  res.json({
+    status: 'ok',
+    sha: process.env.GIT_SHA || 'unknown',
+    uptime: process.uptime()
+  });
+});
+
 // Middleware to check if user is authenticated
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) return next();
