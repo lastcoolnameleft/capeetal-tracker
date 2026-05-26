@@ -1,0 +1,29 @@
+services:
+  capeetal-tracker:
+    container_name: ${COMPOSE_PROJECT_NAME:-capeetal-tracker}
+    image: ${IMAGE:-ghcr.io/lastcoolnameleft/capeetal-tracker:latest}
+    env_file:
+      - ${ENV_FILE:-.env}
+    volumes:
+      - ${DATA_DIR:-.}/db:/code/db
+      - ${DATA_DIR:-.}/map:/code/map
+      - ${DATA_DIR:-.}/stats:/code/stats
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "capeetal-tracker.env=${DEPLOY_ENV:-staging}"
+      - "traefik.enable=true"
+      - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik}"
+      # Main router
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-capeetal-tracker}.rule=Host(`${TRAEFIK_HOST:-localhost}`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-capeetal-tracker}.entrypoints=websecure"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-capeetal-tracker}.tls.certresolver=myresolver"
+      - "traefik.http.services.${COMPOSE_PROJECT_NAME:-capeetal-tracker}.loadbalancer.server.port=8000"
+      # WWW redirect router
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-capeetal-tracker}-www.rule=Host(`www.${TRAEFIK_HOST:-localhost}`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-capeetal-tracker}-www.entrypoints=websecure"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-capeetal-tracker}-www.tls.certresolver=myresolver"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-capeetal-tracker}-www.middlewares=${COMPOSE_PROJECT_NAME:-capeetal-tracker}-www-redirect"
+      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-capeetal-tracker}-www-redirect.redirectregex.regex=^https://www\\.(.*)"
+      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-capeetal-tracker}-www-redirect.redirectregex.replacement=https://$${1}"
+      - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-capeetal-tracker}-www-redirect.redirectregex.permanent=true"
+    restart: unless-stopped
