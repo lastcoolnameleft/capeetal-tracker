@@ -1,3 +1,5 @@
+name: ${COMPOSE_PROJECT_NAME:-capeetal-tracker}
+
 services:
   capeetal-tracker:
     container_name: ${COMPOSE_PROJECT_NAME:-capeetal-tracker}
@@ -17,7 +19,7 @@ services:
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-capeetal-tracker}.rule=Host(`${TRAEFIK_HOST:-localhost}`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-capeetal-tracker}.entrypoints=websecure"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-capeetal-tracker}.tls.certresolver=myresolver"
-      - "traefik.http.services.${COMPOSE_PROJECT_NAME:-capeetal-tracker}.loadbalancer.server.port=8000"
+      - "traefik.http.services.${COMPOSE_PROJECT_NAME:-capeetal-tracker}.loadbalancer.server.port=3000"
       # WWW redirect router
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-capeetal-tracker}-www.rule=Host(`www.${TRAEFIK_HOST:-localhost}`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME:-capeetal-tracker}-www.entrypoints=websecure"
@@ -27,3 +29,8 @@ services:
       - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-capeetal-tracker}-www-redirect.redirectregex.replacement=https://$${1}"
       - "traefik.http.middlewares.${COMPOSE_PROJECT_NAME:-capeetal-tracker}-www-redirect.redirectregex.permanent=true"
     restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
