@@ -268,7 +268,6 @@ function toggleRegion(regionArray, region) {
 }
 
 function drawRegionsMap(regionArray, volumeHash) {
-    var regionArray = addVisitedLocations(regionArray);
     var drawData = generateGoogleDataTable(regionArray);
 
     chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
