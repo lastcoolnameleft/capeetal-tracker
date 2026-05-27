@@ -50,6 +50,8 @@
   background: #fff;
   color: #333 !important;
   border: 1px solid #ddd !important;
+  max-width: 300px;
+  margin: 0 auto;
 }
 
 .auth-btn-google:hover {
