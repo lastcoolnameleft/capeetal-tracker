@@ -10,7 +10,7 @@
     "bcrypt": "^6.0.0",
     "canvas": "^2.11.2",
     "connect-sqlite3": "^0.9.16",
-    "cookie-parser": "~1.4.4",
+    "cookie-parser": "~1.4.7",
     "csrf-sync": "^4.2.1",
     "debug": "~2.6.9",
     "dotenv": "^17.4.2",
