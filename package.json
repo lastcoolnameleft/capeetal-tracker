@@ -19,7 +19,7 @@
     "express-rate-limit": "^8.5.2",
     "express-session": "^1.19.0",
     "google-charts-node": "^2.0.0",
-    "http-errors": "~1.6.3",
+    "http-errors": "~2.0.1",
     "jimp": "^0.22.12",
     "jsdom": "^24.1.0",
     "morgan": "~1.9.1",
